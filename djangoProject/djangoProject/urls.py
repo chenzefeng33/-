@@ -22,4 +22,7 @@ urlpatterns = [
     # path('admin/', admin.site.urls),
     # www.xxx.com/index/ -> 函数
     path('eventinfo/all/', views.eventinfo_all),
+    path('display/video/', views.video),
+    path('login', views.login),
+    path('register', views.register)
 ]

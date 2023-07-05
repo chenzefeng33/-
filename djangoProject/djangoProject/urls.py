@@ -15,14 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
-from app01 import views
+from app01.views import base, views
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
     # www.xxx.com/index/ -> 函数
     path('eventinfo/all/', views.eventinfo_all),
     path('display/video/', views.video),
-    path('login', views.login),
-    path('register', views.register)
+
+    # BASE 基本
+    path('login', base.login),
+    path('register', base.register)
 ]

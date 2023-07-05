@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class oldperson_info(models.Model):
-    id = models.AutoField(primary_key=True, verbose_name="老人id")
+    ID = models.AutoField(primary_key=True, verbose_name="老人id")
     ORG_ID = models.IntegerField(blank=True, null=True)
     CLIENT_ID = models.IntegerField(blank=True, null=True)
     username = models.CharField(blank=True, null=True, max_length=50, verbose_name="老人姓名")

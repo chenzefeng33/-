@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app01.views import base, views
+from app01.views import base, views, statistics, oldman
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -23,9 +23,17 @@ urlpatterns = [
 
     # test 测试
     path('display/video/', views.video),
-    path('event/list', views.eventList.as_view()),
+    path('event/list', statistics.eventList.as_view()),
 
     # BASE 基本
-    path('login', base.login),
-    path('register', base.register)
+    path('user/login', base.login),
+    path('user/register', base.register),
+    path('user/modifypwd', base.modify_pwd),
+
+    # OLD MAN 老人
+    path('oldman/getall', oldman.get_all_oldman),
+    path('oldman/getbyname', oldman.select_oldman_byname),
+    path('oldman/delete', oldman.delete_by_id),
+    path('oldman/add', oldman.add_oldman),
+    path('oldman/modify', oldman.modify_oldman),
 ]

@@ -20,8 +20,10 @@ from app01.views import base, views
 urlpatterns = [
     # path('admin/', admin.site.urls),
     # www.xxx.com/index/ -> 函数
-    path('eventinfo/all/', views.eventinfo_all),
+
+    # test 测试
     path('display/video/', views.video),
+    path('event/list', views.eventList.as_view()),
 
     # BASE 基本
     path('login', base.login),

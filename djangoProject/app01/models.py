@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class oldperson_info(models.Model):
-    ID = models.IntegerField(primary_key=True, verbose_name="老人id")
+    id = models.AutoField(primary_key=True, verbose_name="老人id")
     ORG_ID = models.IntegerField(blank=True, null=True)
     CLIENT_ID = models.IntegerField(blank=True, null=True)
     username = models.CharField(blank=True, null=True, max_length=50, verbose_name="老人姓名")
@@ -34,7 +34,7 @@ class oldperson_info(models.Model):
     REMOVE = models.CharField(blank=True, null=True, max_length=10, verbose_name="删除标志")
 
 class employee_info(models.Model):
-    id = models.IntegerField(primary_key=True, verbose_name="工作人员id")
+    id = models.AutoField(primary_key=True, verbose_name="工作人员id")
     ORG_ID = models.IntegerField(blank=True, null=True)
     CLIENT_ID = models.IntegerField(blank=True, null=True)
     username = models.CharField(blank=True, null=True, max_length=50, verbose_name="工作人员姓名")
@@ -55,7 +55,7 @@ class employee_info(models.Model):
     REMOVE = models.CharField(blank=True, null=True, max_length=10, verbose_name="删除标志")
 
 class volunteer_info(models.Model):
-    id = models.IntegerField(primary_key=True, verbose_name="义工id")
+    id = models.AutoField(primary_key=True, verbose_name="义工id")
     ORG_ID = models.IntegerField(blank=True, null=True)
     CLIENT_ID = models.IntegerField(blank=True, null=True)
     name = models.CharField(blank=True, null=True, max_length=50, verbose_name="义工姓名")
@@ -76,7 +76,7 @@ class volunteer_info(models.Model):
     REMOVE = models.CharField(blank=True, null=True, max_length=10, verbose_name="删除标志")
 
 class event_info(models.Model):
-    id = models.IntegerField(primary_key=True, verbose_name="事件id")
+    id = models.AutoField(primary_key=True, verbose_name="事件id")
     event_type = models.IntegerField(blank=True, null=True, verbose_name="事件类型")
     event_date = models.DateTimeField(blank=True, null=True, verbose_name="事件发生的时间")
     event_location = models.CharField(blank=True, null=True, max_length=200, verbose_name="事件发生的地点")
@@ -84,7 +84,7 @@ class event_info(models.Model):
     oldperson_id = models.IntegerField(blank=True, null=True, verbose_name="老人id")
 
 class sys_user(models.Model):
-    ID = models.IntegerField(primary_key=True, verbose_name="系统管理员id")
+    ID = models.AutoField(primary_key=True, verbose_name="系统管理员id")
     ORG_ID = models.IntegerField(blank=True, null=True)
     CLIENT_ID = models.IntegerField(blank=True, null=True)
     UserName = models.CharField(blank=True, null=True, max_length=50, verbose_name="用户名")

@@ -1,18 +1,20 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, StreamingHttpResponse
-from django.core import serializers
 import cv2
+from rest_framework import status, generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from djangoProject.serializer import EventSerializer
 from app01.models import event_info
 
 # Create your views here.
 
-def eventinfo_all(request):
-    data_list = event_info.objects.all()
-    data_list_json = serializers.serialize('json', data_list)
-    print(data_list_json)
+class eventList(APIView):
+    def get(self,request):
+        serialize = EventSerializer(instance=event_info.objects.all(), many=True)
+        return Response(serialize.data)
 
-    return JsonResponse(data_list_json, safe=False)
 
 def gen_display(camera):
     """

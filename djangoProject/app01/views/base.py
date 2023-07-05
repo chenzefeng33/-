@@ -1,6 +1,8 @@
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
 from app01.models import sys_user
 
+@api_view(['POST'])
 def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
@@ -13,6 +15,7 @@ def login(request):
             return JsonResponse({'loginstatus':1}, safe=False)
         return JsonResponse({'loginstatus':-1}, safe=False)
 
+@api_view(['POST'])
 def register(request):
     try:
         username = request.POST.get('username')

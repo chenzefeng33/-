@@ -1,8 +1,8 @@
-# project-web
+# Project Web
 
 ## Project setup
 ```
-npm install
+pnpm install
 ```
 
 ### Compiles and hot-reloads for development

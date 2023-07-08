@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, re_path
-from app01.views import base,views,statistics,oldman,volunteers,websockets
+from django.urls import path
+from app01.views import base, views, statistics, oldman, volunteers, websockets, cv, employee
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -43,6 +43,18 @@ urlpatterns = [
     path('volunteers/delete', volunteers.delete_by_id),
     path('volunteers/add', volunteers.add_volunteers),
     path('volunteers/modify', volunteers.modify_volunteers),
+
+    # EMPLOYEE 工作人员
+    path('employee/getall', employee.get_all_employee),
+    path('employee/getbyname', employee.select_employee_byname),
+    path('employee/delete', employee.delete_by_id),
+    path('employee/add', employee.add_employee),
+    path('employee/modify', employee.modify_employee),
+
+    # CV 算法
+    path('cv/video/', cv.video),
+    path('cv/emotion/', cv.emotion),
+    path('cv/fall/', cv.fall),
 
 ]
 

@@ -4,3 +4,5 @@ from .unjson import *
 from .oldman import *
 from .volunteers import *
 from .websockets import *
+from .employee import *
+from .cv import *

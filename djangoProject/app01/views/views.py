@@ -1,4 +1,3 @@
-from django.shortcuts import render, redirect
 from django.http import JsonResponse, StreamingHttpResponse
 import cv2
 

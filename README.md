@@ -2,6 +2,10 @@
 
 ## Project setup
 ```
+npm install
+```
+or
+```
 pnpm install
 ```
 

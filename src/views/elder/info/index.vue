@@ -13,11 +13,11 @@
             <a-row :gutter="12">
               <a-col :span="6">
                 <a-form-item
-                  field="number"
+                  field="id"
                   :label="$t('编号')"
                 >
                   <a-input
-                    v-model="formModel.number"
+                    v-model="formModel.id"
                     :placeholder="$t('请输入编号')"
                   />
                 </a-form-item>
@@ -209,17 +209,18 @@
 
   const generateFormModel = () => {
     return {
-      number: '',
+      index: '',
+      id: '',
       name: '',
-      contentType: '',
-      filterType: '',
-      createdTime: [],
-      status: '',
+      sex: '',
+      age: '',
+      createdTime: '',
     };
   };
   const { loading, setLoading } = useLoading(true);
   const { t } = useI18n();
-  const renderData = ref<PolicyRecord[]>([]);
+  // const renderData = ref<PolicyRecord[]>([]);
+  const renderData = ref<any[]>([]);
   const formModel = ref(generateFormModel());
   const cloneColumns = ref<Column[]>([]);
   const showColumns = ref<Column[]>([]);
@@ -259,7 +260,7 @@
     },
     {
       title: t('编号'),
-      dataIndex: 'number',
+      dataIndex: 'id',
     },
     {
       title: t('姓名'),
@@ -284,9 +285,38 @@
     setLoading(true);
     try {
       // const { data } = await queryPolicyList(params);
-      // renderData.value = data.list;
-      // pagination.current = params.current;
-      // pagination.total = data.total;
+      const data = reactive([{
+      index: 1,
+      id: '02832',
+      name: 'Jane Doe',
+      sex: 'Female',
+      age: 72,
+      createdTime: '2023-7-9'
+    }, {
+      index: 2,
+      id: '53411',
+      name: 'William Smith',
+      sex: 'Male',
+      age: 82,
+      createdTime: '2023-7-9'
+    }, {
+      index: 3,
+      id: '20532',
+      name: 'Alisa Ross',
+      sex: 'Female',
+      age: 65,
+      createdTime: '2023-7-9'
+    },{
+      index: 4,
+      id: '53321',
+      name: 'Kevin Sandra',
+      sex: 'Male',
+      age: 75,
+      createdTime: '2023-7-9'
+    },]);
+      renderData.value = data;
+      pagination.current = params.current;
+      pagination.total = 2;
     } catch (err) {
       // you can report use errorHandler or other
     } finally {

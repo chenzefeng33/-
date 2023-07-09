@@ -2,12 +2,15 @@ import { createApp } from 'vue';
 import ArcoVue from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import globalComponents from '@/components';
+import vue3videoPlay from 'vue3-video-play'; // 引入组件
+import 'vue3-video-play/dist/style.css'; // 引入css
 import router from './router';
 import store from './store';
 import i18n from './locale';
 import directive from './directive';
 import './mock';
 import App from './App.vue';
+
 // Styles are imported via arco-plugin. See config/plugin/arcoStyleImport.ts in the directory for details
 // 样式通过 arco-plugin 插件导入。详见目录文件 config/plugin/arcoStyleImport.ts
 // https://arco.design/docs/designlab/use-theme-package
@@ -24,5 +27,6 @@ app.use(store);
 app.use(i18n);
 app.use(globalComponents);
 app.use(directive);
+app.use(vue3videoPlay)
 
 app.mount('#app');

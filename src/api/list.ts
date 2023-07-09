@@ -3,13 +3,11 @@ import qs from 'query-string';
 import type { DescData } from '@arco-design/web-vue/es/descriptions/interface';
 
 export interface PolicyRecord {
+  index: Int16Array;
   id: string;
-  number: number;
   name: string;
-  contentType: 'img' | 'horizontalVideo' | 'verticalVideo';
-  filterType: 'artificial' | 'rules';
-  count: number;
-  status: 'online' | 'offline';
+  sex : string;
+  age : Int16Array;
   createdTime: string;
 }
 

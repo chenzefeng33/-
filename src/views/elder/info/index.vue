@@ -55,12 +55,34 @@
       <a-row style="margin-bottom: 16px">
         <a-col :span="12">
           <a-space>
-            <a-button type="primary">
+            <a-button type="primary" @click="newMember">
               <template #icon>
                 <icon-plus />
               </template>
               {{ $t('新建') }}
             </a-button>
+            <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel">
+              <template #title>
+                添加
+              </template>
+              <a-form :model="form" :style="{width:'420px'}">
+                <a-form-item field="id" label="编号">
+                  <a-input v-model="form.id" />
+                </a-form-item>
+                <a-form-item field="name" label="姓名">
+                  <a-input v-model="form.name" />
+                </a-form-item>
+                <a-form-item field="sex" label="性别">
+                  <a-select v-model="form.sex">
+                    <a-option value="male">男</a-option>
+                    <a-option value="female">女</a-option>
+                  </a-select>
+                </a-form-item>
+                <a-form-item field="age" label="年龄">
+                  <a-input v-model="form.age" />
+                </a-form-item>
+              </a-form>
+            </a-modal>
             <a-upload action="/">
               <template #upload-button>
                 <a-button>
@@ -149,50 +171,6 @@
         <template #index="{ rowIndex }">
           {{ rowIndex + 1 + (pagination.current - 1) * pagination.pageSize }}
         </template>
-        <!-- <template #contentType="{ record }">
-          <a-space>
-            <a-avatar
-              v-if="record.contentType === 'img'"
-              :size="16"
-              shape="square"
-            >
-              <img
-                alt="avatar"
-                src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/581b17753093199839f2e327e726b157.svg~tplv-49unhts6dw-image.image"
-              />
-            </a-avatar>
-            <a-avatar
-              v-else-if="record.contentType === 'horizontalVideo'"
-              :size="16"
-              shape="square"
-            >
-              <img
-                alt="avatar"
-                src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/77721e365eb2ab786c889682cbc721c1.svg~tplv-49unhts6dw-image.image"
-              />
-            </a-avatar>
-            <a-avatar v-else :size="16" shape="square">
-              <img
-                alt="avatar"
-                src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/ea8b09190046da0ea7e070d83c5d1731.svg~tplv-49unhts6dw-image.image"
-              />
-            </a-avatar>
-            {{ $t(`searchTable.form.contentType.${record.contentType}`) }}
-          </a-space>
-        </template> -->
-        <!-- <template #filterType="{ record }">
-          {{ $t(`searchTable.form.filterType.${record.filterType}`) }}
-        </template>
-        <template #status="{ record }">
-          <span v-if="record.status === 'offline'" class="circle"></span>
-          <span v-else class="circle pass"></span>
-          {{ $t(`searchTable.form.status.${record.status}`) }}
-        </template>
-        <template #operations>
-          <a-button v-permission="['admin']" type="text" size="small">
-            {{ $t('searchTable.columns.operations.view') }}
-          </a-button>
-        </template> -->
       </a-table>
     </a-card>
   </div>
@@ -211,6 +189,23 @@
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
+
+  const newMember = () => {
+    visible.value = true;
+  };
+  const visible = ref(false);
+  const form = reactive({
+      id: '',
+      name: '',
+      sex: '',
+      age: ''
+    });
+  const handleOk = () => {
+    visible.value = false;
+  };
+  const handleCancel = () => {
+    visible.value = false;
+  }
 
   const generateFormModel = () => {
     return {
@@ -269,6 +264,10 @@
     {
       title: t('姓名'),
       dataIndex: 'name',
+    },
+    {
+      title: t('性别'),
+      dataIndex: 'sex',
     },
     {
       title: t('年龄'),

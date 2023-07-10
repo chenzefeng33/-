@@ -1,6 +1,7 @@
 from django.http import JsonResponse, StreamingHttpResponse
 import cv2
 
+
 # Create your views here.
 
 def gen_display(camera):
@@ -10,13 +11,17 @@ def gen_display(camera):
     while True:
         # 读取图片
         ret, frame = camera.read()
+        print(frame)
+        print(ret)
         if ret:
+            frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
             # 将图片进行解码
             ret, frame = cv2.imencode('.jpeg', frame)
             if ret:
                 # 转换为byte类型的，存储在迭代器中
                 yield (b'--frame\r\n'
                        b'Content-Type: image/jpeg\r\n\r\n' + frame.tobytes() + b'\r\n')
+
 
 def video(request):
     """

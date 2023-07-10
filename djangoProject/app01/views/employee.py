@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from rest_framework.response import Response
-from .unjson import UnJson
+from app01.views.unjson import UnJson
 from rest_framework.decorators import api_view
 from app01.models import employee_info
 from djangoProject.serializer import EmployeeSerializer

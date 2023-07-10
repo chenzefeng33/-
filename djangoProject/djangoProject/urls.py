@@ -13,16 +13,14 @@ Including another URLconf
     1. Import to include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path
-from app01.views import base, views, statistics, oldman, volunteers, websockets, cv, employee
+from app01.views import base, cv, employee, oldman, statistics, volunteers, websockets
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
     # www.xxx.com/index/ -> 函数
 
     # test 测试
-    path('display/video/', views.video),
     path('event/list', statistics.eventList.as_view()),
 
     # BASE 基本
@@ -58,8 +56,8 @@ urlpatterns = [
 
 ]
 
-websocket_urlpatterns = [
-    # 前端请求websocket连接
-    path('wx/chat/', websockets.ChatConsumer.as_asgi()),
-    path('wx/video/', websockets.VideoConsumer.as_asgi()),
-]
+# websocket_urlpatterns = [
+#     # 前端请求websocket连接
+#     path('wx/chat/', websockets.ChatConsumer.as_asgi()),
+#     path('wx/video/', websockets.VideoConsumer.as_asgi()),
+# ]

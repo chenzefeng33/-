@@ -1,14 +1,13 @@
 import pickle
 from statistics import mode
 
-import mediapipe as mp
 import numpy as np
-from django.core import serializers
-from django.http import JsonResponse, StreamingHttpResponse
+from django.http import StreamingHttpResponse, JsonResponse
 from keras.models import load_model
 
+from app01.models import sys_user
 from cvSource.emotionDetect.utils.datasets import get_labels
-from cvSource.emotionDetect.utils.inference import apply_offsets, draw_bounding_box, draw_text
+from cvSource.emotionDetect.utils.inference import apply_offsets, draw_bounding_box, draw_texts
 from cvSource.emotionDetect.utils.preprocessor import preprocess_input
 from cvSource.fallDetect.fallDetection import *
 
@@ -16,6 +15,7 @@ def setCamera(camera):
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
     camera.set(cv2.CAP_PROP_FPS, 15)
+
 
 def faceDetect(camera):
     """
@@ -32,6 +32,7 @@ def faceDetect(camera):
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame.tobytes() + b'\r\n')
 
+
 def emotionDetect(camera):
     """
         视频流生成器功能。
@@ -39,7 +40,6 @@ def emotionDetect(camera):
     while True:
         # 读取图片
         ret, frame = camera.read()
-        print(frame)
         emotionDetectProcess(frame)
         if ret:
             # 将图片进行解码
@@ -47,6 +47,7 @@ def emotionDetect(camera):
             # 转换为byte类型的，存储在迭代器中
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame.tobytes() + b'\r\n')
+
 
 def fallDetect(camera):
     """
@@ -63,6 +64,7 @@ def fallDetect(camera):
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame.tobytes() + b'\r\n')
 
+
 def video(request):
     """
     视频流路由。将其放入img标记的src属性中。
@@ -73,6 +75,7 @@ def video(request):
     setCamera(camera)
     # 使用流传输传输视频流
     return StreamingHttpResponse(faceDetect(camera), content_type='multipart/x-mixed-replace; boundary=frame')
+
 
 def emotion(request):
     """
@@ -85,6 +88,7 @@ def emotion(request):
     # 使用流传输传输视频流
     return StreamingHttpResponse(emotionDetect(camera), content_type='multipart/x-mixed-replace; boundary=frame')
 
+
 def fall(request):
     """
             视频流路由。将其放入img标记的src属性中。
@@ -95,6 +99,35 @@ def fall(request):
     # setCamera(camera)
     # 使用流传输传输视频流
     return StreamingHttpResponse(fallDetect(camera), content_type='multipart/x-mixed-replace; boundary=frame')
+
+
+def login(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    if username and password:
+        try:
+            user = sys_user.objects.get(UserName=username)
+        except:
+            return JsonResponse({'loginstatus': 0}, safe=False)
+        if user.Password == password:
+            return JsonResponse({'loginstatus': 1}, safe=False)
+        return JsonResponse({'loginstatus': -1}, safe=False)
+
+
+def register(request):
+    try:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        if username and password:
+            same_user = sys_user.objects.filter(UserName=username)
+            if same_user.exists():
+                return JsonResponse({'rigisterstatus': 0}, safe=False)
+            else:
+                sys_user.objects.create(UserName=username, Password=password)
+    except:
+        return JsonResponse({'rigisterstatus': -1}, safe=False)
+    return JsonResponse({'rigisterstatus': 1}, safe=False)
+
 
 def faceDetectProcess(frame):
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -115,6 +148,7 @@ def faceDetectProcess(frame):
             # 陌生人
             cv2.putText(frame, "Unknown", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 2)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
 
 def emotionDetectProcess(frame):
     gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -172,13 +206,14 @@ def emotionDetectProcess(frame):
             # 已知人脸
             label = list(label_mapping.keys())[list(label_mapping.values()).index(label_id)]
             draw_bounding_box(face_coordinates, frame, color)
-            draw_text(face_coordinates, frame, label, emotion_mode, color, 0, -45, 1, 1)
+            draw_texts(face_coordinates, frame, label, emotion_mode, color, 0, -45, 1, 1)
         else:
             # 陌生人
             draw_bounding_box(face_coordinates, frame, color)
-            draw_text(face_coordinates, frame, "Unknown", emotion_mode, color, 0, -45, 1, 1)
+            draw_texts(face_coordinates, frame, "Unknown", emotion_mode, color, 0, -45, 1, 1)
         """
         """
+
 
 def fallDetectProcess(image):
     # 初始化姿势估计器
@@ -245,7 +280,7 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_fronta
 emotion_model_path = 'cvSource/emotionDetect/models/emotion_model.hdf5'
 emotion_labels = get_labels('fer2013')
 
-# hyperparameters for bounding boxes shape
+# hyper-parameters for bounding boxes shape
 frame_window = 10
 emotion_offsets = (20, 40)
 

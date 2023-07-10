@@ -1,32 +1,72 @@
 <template>
   <div class="container">
     <Breadcrumb :items="['menu.admin', 'menu.admin.info']" />
-
+    <a-row style="margin-bottom: 16px">
+      <a-col :span="24">
+        <UserPanel />
+      </a-col>
+    </a-row>
+    <a-row class="wrapper">
+      <a-col :span="24">
+        <a-tabs default-active-key="1" type="rounded">
+          <a-tab-pane key="1" :title="$t('基础信息')">
+            <BasicInformation />
+          </a-tab-pane>
+          <!-- <a-tab-pane key="2" :title="$t('userSetting.tab.securitySettings')">
+            <SecuritySettings />
+          </a-tab-pane>
+          <a-tab-pane key="3" :title="$t('userSetting.tab.certification')">
+            <Certification />
+          </a-tab-pane> -->
+        </a-tabs>
+      </a-col>
+    </a-row>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import UserPanel from './components/user-panel.vue';
+  import BasicInformation from './components/basic-information.vue';
+</script>
 
 <script lang="ts">
   export default {
-    name: '',
+    name: 'Setting',
   };
 </script>
 
 <style scoped lang="less">
+  // .container {
+  //   padding: 0 20px 20px 20px;
+  //   height: calc(100% - 40px);
+  //   :deep(.content) {
+  //     position: relative;
+  //     display: flex;
+  //     flex-direction: column;
+  //     align-items: center;
+  //     justify-content: center;
+  //     height: 100%;
+  //     text-align: center;
+  //     background-color: var(--color-bg-1);
+  //     border-radius: 4px;
+  //   }
+  // }
+
   .container {
     padding: 0 20px 20px 20px;
-    height: calc(100% - 40px);
-    :deep(.content) {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      text-align: center;
-      background-color: var(--color-bg-1);
-      border-radius: 4px;
-    }
   }
+
+  .wrapper {
+    padding: 20px 0 0 20px;
+    min-height: 580px;
+    background-color: var(--color-bg-2);
+    border-radius: 4px;
+  }
+
+  :deep(.section-title) {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
 </style>

@@ -56,14 +56,14 @@
       key: 'message',
       title: t('messageBox.tab.title.message'),
     },
-    {
-      key: 'notice',
-      title: t('messageBox.tab.title.notice'),
-    },
-    {
-      key: 'todo',
-      title: t('messageBox.tab.title.todo'),
-    },
+    // {
+    //   key: 'notice',
+    //   title: t('messageBox.tab.title.notice'),
+    // },
+    // {
+    //   key: 'todo',
+    //   title: t('messageBox.tab.title.todo'),
+    // },
   ];
   async function fetchSourceData() {
     setLoading(true);

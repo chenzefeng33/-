@@ -1,0 +1,51 @@
+2023/07/10 11:34:15 [notice] 18816#19488: sockinit() attempting to access sockapi
+2023/07/10 11:34:15 [notice] 18816#19488: Access to sockapi succeded!
+2023/07/10 11:34:15 [notice] 18816#19488: using sockapi from "4;8;"
+2023/07/10 11:34:15 [notice] 14532#1768: sockinit() attempting to access sockapi
+2023/07/10 11:34:15 [notice] 14532#1768: Access to sockapi succeded!
+2023/07/10 11:34:15 [notice] 14532#1768: using sockapi from "4;8;"
+2023/07/10 11:35:25 [notice] 3108#8164: Fatal: wait for sockapi failed
+2023/07/10 11:35:59 [notice] 19676#3224: Fatal: wait for sockapi failed
+2023/07/10 11:36:06 [notice] 19252#15932: Fatal: wait for sockapi failed
+2023/07/10 11:36:08 [notice] 18072#18652: Fatal: wait for sockapi failed
+2023/07/10 11:36:23 [notice] 4668#16480: Fatal: wait for sockapi failed
+2023/07/10 11:36:25 [notice] 19644#19052: Fatal: wait for sockapi failed
+2023/07/10 11:36:26 [notice] 9904#19040: Fatal: wait for sockapi failed
+2023/07/10 11:38:06 [notice] 19876#6548: Fatal: wait for sockapi failed
+2023/07/10 11:38:20 [notice] 20048#11176: Fatal: wait for sockapi failed
+2023/07/10 11:40:10 [crit] 14532#11276: *1 record:  failed to open file '/tmp/av/home-1688960410.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 11:41:00 [crit] 18816#18992: *3 record:  failed to open file '/tmp/av/home-1688960460.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 11:41:19 [crit] 14532#11276: *4 record:  failed to open file '/tmp/av/home-1688960479.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 11:53:11 [notice] 15612#21448: Fatal: wait for sockapi failed
+2023/07/10 14:25:52 [notice] 15540#22996: Fatal: wait for sockapi failed
+2023/07/10 14:33:33 [notice] 18536#17840: Fatal: wait for sockapi failed
+2023/07/10 14:58:43 [notice] 25500#20720: Fatal: wait for sockapi failed
+2023/07/10 15:06:00 [notice] 22504#11392: Fatal: wait for sockapi failed
+2023/07/10 15:10:14 [notice] 24116#19040: Fatal: wait for sockapi failed
+2023/07/10 15:11:03 [emerg] 18804#23752: CreateFile() "C:\Users\XiaoAn1\PycharmProjects\djangoProject\nginx-1.7.11.3-Gryphon/conf/nginx.conf" failed (2: The system cannot find the file specified)
+2023/07/10 15:11:13 [notice] 21180#21692: Fatal: wait for sockapi failed
+2023/07/10 15:11:23 [emerg] 23376#22388: CreateFile() "C:\Users\XiaoAn1\PycharmProjects\djangoProject\nginx-1.7.11.3-Gryphon/conf/nginx.conf" failed (2: The system cannot find the file specified)
+2023/07/10 15:12:19 [notice] 16280#11840: Fatal: wait for sockapi failed
+2023/07/10 15:13:15 [notice] 8332#25240: sockinit() attempting to access sockapi
+2023/07/10 15:13:15 [notice] 8332#25240: Access to sockapi succeded!
+2023/07/10 15:13:15 [notice] 8332#25240: using sockapi from "4;8;"
+2023/07/10 15:13:15 [notice] 22460#21212: sockinit() attempting to access sockapi
+2023/07/10 15:13:15 [notice] 22460#21212: Access to sockapi succeded!
+2023/07/10 15:13:15 [notice] 22460#21212: using sockapi from "4;8;"
+2023/07/10 15:23:34 [crit] 8332#20960: *1 record:  failed to open file '/tmp/av/home-1688973814.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:37:18 [crit] 8332#20960: *5 record:  failed to open file '/tmp/av/home-1688974638.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:38:23 [crit] 8332#20960: *6 record:  failed to open file '/tmp/av/home-1688974703.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:41:02 [error] 8332#20960: *8 live: already publishing, client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:41:02 [crit] 8332#20960: *8 record:  failed to open file '/tmp/av/home-1688974862.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:41:03 [crit] 22460#25580: *9 record:  failed to open file '/tmp/av/home-1688974863.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:42:14 [error] 22460#25580: *11 live: already publishing, client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:42:14 [crit] 22460#25580: *11 record:  failed to open file '/tmp/av/home-1688974934.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:44:05 [crit] 8332#20960: *12 record:  failed to open file '/tmp/av/home-1688975045.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:52:15 [crit] 8332#20960: *16 record:  failed to open file '/tmp/av/home-1688975535.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:57:32 [error] 8332#20960: *17 live: already publishing, client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:57:32 [crit] 8332#20960: *17 record:  failed to open file '/tmp/av/home-1688975852.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 15:59:24 [crit] 8332#20960: *19 record:  failed to open file '/tmp/av/home-1688975964.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 16:09:44 [crit] 8332#20960: *21 record:  failed to open file '/tmp/av/home-1688976584.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 16:11:46 [error] 8332#20960: *22 live: already publishing, client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 16:11:46 [crit] 8332#20960: *22 record:  failed to open file '/tmp/av/home-1688976706.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935
+2023/07/10 16:13:16 [crit] 22460#25580: *24 record:  failed to open file '/tmp/av/home-1688976796.flv' (3: The system cannot find the path specified), client: 127.0.0.1, server: 0.0.0.0:1935

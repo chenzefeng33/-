@@ -14,14 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from app01.views import base, cv, employee, oldman, statistics, volunteers, websockets
+from app01.views import base, cv, employee, oldman, statistics, volunteers, websockets, live
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
     # www.xxx.com/index/ -> 函数
 
-    # test 测试
-    path('event/list', statistics.eventList.as_view()),
+    # STATISTICS 静态方法
+    path('statistics/upload', statistics.uploadAvatar),
+    path('statistics/getimg', statistics.getImg),
 
     # BASE 基本
     path('user/login', base.login),
@@ -53,6 +54,9 @@ urlpatterns = [
     path('cv/video/', cv.video),
     path('cv/emotion/', cv.emotion),
     path('cv/fall/', cv.fall),
+
+    # LIVE 直播
+    path('live/video/', live.play_video)
 
 ]
 

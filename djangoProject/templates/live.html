@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>使用 Video.js 播放 RTMP 流</title>
+    <link href="https://vjs.zencdn.net/7.15.4/video-js.min.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/7.15.4/video.min.js"></script>
+</head>
+<body>
+<video id="my-player" class="video-js vjs-default-skin" controls autoplay>
+    <source src="rtmp://localhost:1935/live/home" type="rtmp/mp4">
+</video>
+
+<script>
+    // 确保 Video.js 库文件已加载
+    if (typeof videojs !== 'undefined') {
+        // 设置 Flash 路径
+        videojs.options.flash.swf = 'https://vjs.zencdn.net/7.15.4/video-js.swf';
+
+        // 初始化 Video.js 播放器
+        var player = videojs('my-player');
+    }
+</script>
+</body>
+</html>
+

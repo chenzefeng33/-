@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app01.apps.App01Config',
+    'background_task',
     # 'rest_framework',
     # 'corsheaders',  # 注册应用cors
     # 'channels'

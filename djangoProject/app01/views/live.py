@@ -1,13 +1,18 @@
 import queue
-import threading
-import cv2 as cv
 import subprocess as sp
+import threading
 
-from django.shortcuts import render
+import cv2 as cv
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+
+from app01.views.cv import faceDetectProcess, fallDetectProcess, emotionDetectProcess
+from app01.views.unjson import UnJson
 
 
 class Live(object):
-    def __init__(self):
+    def __init__(self, way):
+        self.way = way
         self.frame_queue = queue.Queue()
         self.command = ""
         # 自行设置
@@ -23,7 +28,7 @@ class Live(object):
         height = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
 
         # ffmpeg command
-        self.command = ['C:\\Users\\XiaoAn1\\PycharmProjects\\djangoProject\\ffmpeg-master-latest-win64-gpl\\bin\\ffmpeg.exe',
+        self.command = ['ffmpeg',
                         '-y',
                         '-f', 'rawvideo',
                         '-vcodec', 'rawvideo',
@@ -38,31 +43,47 @@ class Live(object):
                         self.rtmpUrl]
 
         # read webcamera
-        while (cap.isOpened()):
+        while cap.isOpened():
             ret, frame = cap.read()
 
             if not ret:
                 print("Opening camera is failed")
+                # 说实话这里的break应该替换为：
                 cap = cv.VideoCapture(self.camera_path)
+                # 因为我这俩天遇到的项目里出现断流的毛病
+                # 特别是拉取rtmp流的时候！！！！
+                # break
 
             # put frame into queue
             self.frame_queue.put(frame)
+
+        cap.release()
 
     def push_frame(self):
         # 防止多线程时 command 未被设置
         while True:
             if len(self.command) > 0:
                 # 管道配置
-                p = sp.Popen(self.command, stdin=sp.PIPE)
+                p = sp.Popen(self.command, shell=False, stdin=sp.PIPE)
                 break
 
         while True:
-            if self.frame_queue.empty() != True:
+            if not self.frame_queue.empty():
                 frame = self.frame_queue.get()
                 # process frame
                 # 你处理图片的代码
+                if self.way == "face":
+                    faceDetectProcess(frame)
+                elif self.way == "fall":
+                    fallDetectProcess(frame)
+                elif self.way == "emotion":
+                    emotionDetectProcess(frame)
                 # write to pipe
                 p.stdin.write(frame.tostring())
+
+        p.stdin.close()
+
+        p.wait()
 
     def run(self):
         threads = [
@@ -72,9 +93,70 @@ class Live(object):
         [thread.setDaemon(True) for thread in threads]
         [thread.start() for thread in threads]
 
-def play_video(request):
-    # 推流
-    live = Live()
-    live.run()
-    return render(request, 'live.html', {'error_message': "ii"})
 
+@api_view(['POST'])
+def play_video(request):
+    data = UnJson(request.data)
+    # 推流
+    live = Live(data.way)
+    live.run()
+    return JsonResponse({'status': '推流成功', 'code': 200}, safe=False)
+
+# def play_video(request):
+#     # 视频读取对象
+#     cap = cv.VideoCapture(0, cv.CAP_DSHOW)
+#
+#     # 推流地址
+#     rtsp = "rtmp://localhost:1935/live/home"  # 推流的服务器地址
+#     # 设置推流的参数
+#     command = ['ffmpeg',
+#                '-y',
+#                '-f', 'rawvideo',
+#                '-vcodec', 'rawvideo',
+#                '-pix_fmt', 'bgr24',
+#                '-s', '640*480',  # 根据输入视频尺寸填写
+#                '-r', '30',
+#                '-i', '-',
+#                '-c:v', 'libx264',
+#                '-pix_fmt', 'yuv420p',
+#                '-preset', 'ultrafast',
+#                '-f', 'flv',
+#                rtsp]
+#     # 创建、管理子进程
+#     pipe = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE)
+#     size = (int(cap.get(cv.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv.CAP_PROP_FRAME_HEIGHT)))
+#
+#     # 循环读取
+#     num = 0
+#     while cap.isOpened():
+#         num = num + 1
+#         # 读取一帧
+#         ret, frame = cap.read()
+#         faceDetectProcess(frame)
+#         if frame is None:
+#             print('read frame err!')
+#             continue
+#
+#         # 显示一帧
+#         cv.imshow("frame", frame)
+#
+#         # 按键退出
+#         if cv.waitKey(1) & 0xFF == ord('q'):
+#             break
+#
+#         # 读取尺寸、推流
+#         img = cv.resize(src=frame, dsize=size)
+#
+#         pipe.stdin.write(img.tobytes())
+#
+#     # 关闭输入流
+#     pipe.stdin.close()
+#
+#     # 等待子进程结束
+#     pipe.wait()
+#
+#     # 关闭窗口
+#     cv.destroyAllWindows()
+#
+#     # 停止读取
+#     cap.release()

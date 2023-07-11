@@ -13,7 +13,7 @@ Including another URLconf
     1. Import to include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path
+from django.urls import path, re_path
 from app01.views import base, cv, employee, oldman, statistics, volunteers, websockets, live
 
 urlpatterns = [
@@ -51,17 +51,11 @@ urlpatterns = [
     path('employee/modify', employee.modify_employee),
 
     # CV 算法
-    path('cv/video/', cv.video),
-    path('cv/emotion/', cv.emotion),
-    path('cv/fall/', cv.fall),
-
-    # LIVE 直播
-    path('live/video/', live.play_video)
+    path('live/video/', live.play_video),
 
 ]
 
-# websocket_urlpatterns = [
-#     # 前端请求websocket连接
-#     path('wx/chat/', websockets.ChatConsumer.as_asgi()),
-#     path('wx/video/', websockets.VideoConsumer.as_asgi()),
-# ]
+websocket_urlpatterns = [
+    # 前端请求websocket连接
+    re_path(r'video/(?P<v_name>\w+)/$', websockets.VideoConsumer.as_asgi()),
+]

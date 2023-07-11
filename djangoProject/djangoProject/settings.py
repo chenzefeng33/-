@@ -41,9 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app01.apps.App01Config',
     'background_task',
-    # 'rest_framework',
+    'rest_framework',
     # 'corsheaders',  # 注册应用cors
-    # 'channels'
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -166,5 +166,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     'Pragma',
 # )
 #
-# # 指定ASGI的路由地址
-# ASGI_APPLICATION = 'djangoProject.asgi.application'
+# 指定ASGI的路由地址
+ASGI_APPLICATION = 'djangoProject.asgi.application'

@@ -1,42 +1,55 @@
-# from app01.views.unjson import UnJson
-# import uuid
-# from channels.generic.websocket import WebsocketConsumer
-#
-# clients = {}  # 创建客户端列表，存储所有在线客户端
-# cameras = {}  # 摄像头列表
-#
-# class ChatConsumer(WebsocketConsumer):
-#     def connect(self):
-#         self.accept()
-#
-#     def disconnect(self, close_code):
-#         pass
-#
-#     def receive(self, text_data):
-#         """
-#         接收消息
-#         :param text_data: 客户端发送的消息
-#         :return:
-#         """
-#         userid = str(uuid.uuid4())
-#         data = UnJson(text_data)
-#         print(data.msg)
-#         # str(text_data.username, encoding="utf-8")
-#         self.send("客户端链接成功：")
-#
-# class VideoConsumer(WebsocketConsumer):
-#     def connect(self):
-#         self.accept()
-#
-#     def disconnect(self, close_code):
-#         pass
-#
-#     def receive(self, text_data):
-#         """
-#         接收消息
-#         :param text_data: 客户端发送的消息
-#         :return:
-#         """
-#         print(text_data)
-#         self.send()
+import json
 
+from channels.generic.websocket import AsyncWebsocketConsumer
+from django.shortcuts import render
+
+from app01.views import cv
+
+video_consumers = []
+
+
+class VideoConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        self.room_name = self.scope['url_route']['kwargs']['v_name']
+        self.room_group_name = 'video_%s' % self.room_name
+        # Join room group
+        await self.channel_layer.group_add(
+            self.room_group_name,
+            self.channel_name
+        )
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        # Leave room group
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+
+    # Receive message from WebSocket
+    async def receive(self, text_data):
+        # print(1)
+        # Send message to room group
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'video_message',
+                'message': text_data,
+            }
+        )
+
+    # Receive message from room group
+    async def video_message(self, event):
+        # print(1)
+        message = event['message']
+
+        # Send message to WebSocket
+        await self.send(text_data=json.dumps({
+            'message': message
+        }))
+
+
+def v_name(request, v_name):
+    return render(request, 'video.html', {
+        'v_name': v_name
+    })

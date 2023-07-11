@@ -2,14 +2,15 @@ import pickle
 from statistics import mode
 
 import numpy as np
-from django.http import StreamingHttpResponse, JsonResponse
+from django.http import StreamingHttpResponse
 from keras.models import load_model
 
-from app01.models import sys_user
+from app01.views.websockets import video_consumers
 from cvSource.emotionDetect.utils.datasets import get_labels
 from cvSource.emotionDetect.utils.inference import apply_offsets, draw_bounding_box, draw_texts
 from cvSource.emotionDetect.utils.preprocessor import preprocess_input
 from cvSource.fallDetect.fallDetection import *
+
 
 def setCamera(camera):
     camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -57,6 +58,9 @@ def fallDetect(camera):
         # 读取图片
         ret, frame = camera.read()
         fallDetectProcess(frame)
+        # 发送视频帧给所有连接的消费者
+        for consumer in video_consumers:
+            consumer.send_video_frame(frame)
         if ret:
             # 将图片进行解码
             ret, frame = cv2.imencode('.jpeg', frame)
@@ -99,34 +103,6 @@ def fall(request):
     # setCamera(camera)
     # 使用流传输传输视频流
     return StreamingHttpResponse(fallDetect(camera), content_type='multipart/x-mixed-replace; boundary=frame')
-
-
-def login(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    if username and password:
-        try:
-            user = sys_user.objects.get(UserName=username)
-        except:
-            return JsonResponse({'loginstatus': 0}, safe=False)
-        if user.Password == password:
-            return JsonResponse({'loginstatus': 1}, safe=False)
-        return JsonResponse({'loginstatus': -1}, safe=False)
-
-
-def register(request):
-    try:
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        if username and password:
-            same_user = sys_user.objects.filter(UserName=username)
-            if same_user.exists():
-                return JsonResponse({'rigisterstatus': 0}, safe=False)
-            else:
-                sys_user.objects.create(UserName=username, Password=password)
-    except:
-        return JsonResponse({'rigisterstatus': -1}, safe=False)
-    return JsonResponse({'rigisterstatus': 1}, safe=False)
 
 
 def faceDetectProcess(frame):

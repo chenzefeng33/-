@@ -1,32 +1,39 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.worker', 'menu.worker.form']" />
-
+    <Breadcrumb
+      :items="[
+        'menu.worker',
+        'menu.worker.form',
+      ]"
+    />
+    <a-space direction="vertical" :size="16" fill>
+      <Chart />
+    </a-space>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import Chart from './components/chart_worker.vue';
+</script>
 
 <script lang="ts">
   export default {
-    name: '',
+    name: 'Form-worker',
   };
 </script>
 
 <style scoped lang="less">
   .container {
     padding: 0 20px 20px 20px;
-    height: calc(100% - 40px);
-    :deep(.content) {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      text-align: center;
-      background-color: var(--color-bg-1);
-      border-radius: 4px;
-    }
+  }
+
+  :deep(.section-title) {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 16px;
+  }
+
+  :deep(.chart-wrap) {
+    height: 264px;
   }
 </style>

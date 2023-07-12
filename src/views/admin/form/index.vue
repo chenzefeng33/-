@@ -7,13 +7,13 @@
         ]"
       />
       <a-space direction="vertical" :size="16" fill>
-        <ContentPublishingSource />
+        <Chart />
       </a-space>
     </div>
   </template>
   
   <script lang="ts" setup>
-    import ContentPublishingSource from './components/content-publishing-source.vue';
+    import Chart from './components/chart_total.vue';
   </script>
   
   <script lang="ts">

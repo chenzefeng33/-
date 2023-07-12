@@ -32,16 +32,16 @@ const ADMIN: AppRouteRecordRaw = {
     //     roles: ['*'],
     //   },
     // },
-    // {
-    //     path: 'form',
-    //     name: 'Form-admin',
-    //     component: () => import('@/views/admin/form/index.vue'),
-    //     meta: {
-    //       locale: 'menu.admin.form',
-    //       requiresAuth: true,
-    //       roles: ['*'],
-    //     },
-    //   },
+    {
+        path: 'form',
+        name: 'Form-admin',
+        component: () => import('@/views/admin/form/index.vue'),
+        meta: {
+          locale: 'menu.admin.form',
+          requiresAuth: true,
+          roles: ['*'],
+        },
+      },
   ],
 };
 

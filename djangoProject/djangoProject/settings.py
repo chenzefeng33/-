@@ -33,28 +33,29 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'app01.apps.App01Config',
     'background_task',
     'rest_framework',
-    # 'corsheaders',  # 注册应用cors
-    'channels'
+    'corsheaders',  # 注册应用cors
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',  # 注册组件cors
+    'corsheaders.middleware.CorsMiddleware',  # 注册组件cors
+    'django.middleware.common.CommonMiddleware'
 ]
 
 ROOT_URLCONF = 'djangoProject.urls'
@@ -140,31 +141,43 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# # 跨域增加忽略
-# CORS_ALLOW_CREDENTIALS = True
-# CORS_ORIGIN_ALLOW_ALL = True
-#
-# CORS_ALLOW_METHODS = (
-#     'GET',
-#     'OPTIONS',
-#     'PATCH',
-#     'POST',
-#     'VIEW',
-# )
-#
-# CORS_ALLOW_HEADERS = (
-#     'XMLHttpRequest',
-#     'X_FILENAME',
-#     'accept-encoding',
-#     'authorization',
-#     'content-type',
-#     'dnt',
-#     'origin',
-#     'user-agent',
-#     'x-csrftoken',
-#     'x-requested-with',
-#     'Pragma',
-# )
-#
+# 跨域增加忽略
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_METHODS = (
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'VIEW',
+)
+
+# 添加访问白名单
+CORS_ORIGIN_WHITELIST = [
+    "https://www.example.com",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+]
+
+# 白名单也可使用正则
+CORS_ORIGIN_REGEX_WHITELIST = [
+    r"^https://\w+\.test\.com$",
+]
+
+CORS_ALLOW_HEADERS = (
+    'XMLHttpRequest',
+    'X_FILENAME',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Pragma',
+)
+
 # 指定ASGI的路由地址
 ASGI_APPLICATION = 'djangoProject.asgi.application'

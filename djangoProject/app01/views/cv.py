@@ -5,7 +5,6 @@ import numpy as np
 from django.http import StreamingHttpResponse
 from keras.models import load_model
 
-from app01.views.websockets import video_consumers
 from cvSource.emotionDetect.utils.datasets import get_labels
 from cvSource.emotionDetect.utils.inference import apply_offsets, draw_bounding_box, draw_texts
 from cvSource.emotionDetect.utils.preprocessor import preprocess_input
@@ -58,9 +57,6 @@ def fallDetect(camera):
         # 读取图片
         ret, frame = camera.read()
         fallDetectProcess(frame)
-        # 发送视频帧给所有连接的消费者
-        for consumer in video_consumers:
-            consumer.send_video_frame(frame)
         if ret:
             # 将图片进行解码
             ret, frame = cv2.imencode('.jpeg', frame)

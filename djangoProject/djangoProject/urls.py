@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path, re_path
-from app01.views import base, cv, employee, oldman, statistics, volunteers, websockets, live
+
+from app01.views import base, employee, oldman, statistics, volunteers, websockets, live, views
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -22,7 +23,7 @@ urlpatterns = [
 
     # STATISTICS 静态方法
     path('statistics/upload', statistics.uploadAvatar),
-    path('statistics/getimg', statistics.getImg),
+    path('statistics/getimg/<str:type>/<str:id>/', statistics.getImg),
 
     # BASE 基本
     path('user/login', base.login),
@@ -32,6 +33,7 @@ urlpatterns = [
     # OLD MAN 老人
     path('oldman/getall', oldman.get_all_oldman),
     path('oldman/getbyname', oldman.select_oldman_byname),
+    path('oldman/getbyidcard', oldman.select_oldman_byidcard),
     path('oldman/delete', oldman.delete_by_id),
     path('oldman/add', oldman.add_oldman),
     path('oldman/modify', oldman.modify_oldman),
@@ -39,6 +41,7 @@ urlpatterns = [
     # VOLUNTEERS 义工
     path('volunteers/getall', volunteers.get_all_volunteers),
     path('volunteers/getbyname', volunteers.select_volunteers_byname),
+    path('volunteers/getbyidcard', volunteers.select_volunteers_byidcard),
     path('volunteers/delete', volunteers.delete_by_id),
     path('volunteers/add', volunteers.add_volunteers),
     path('volunteers/modify', volunteers.modify_volunteers),
@@ -53,9 +56,14 @@ urlpatterns = [
     # CV 算法
     path('live/video/', live.play_video),
 
+    # TEST 测试
+    path('test/index/', views.index),
+    path('test/index1/', views.index1),
+
 ]
 
 websocket_urlpatterns = [
     # 前端请求websocket连接
-    re_path(r'video/(?P<v_name>\w+)/$', websockets.VideoConsumer.as_asgi()),
+    re_path(r'video/(?P<group>\w+)/$', websockets.VideoConsumer.as_asgi()),
+    re_path(r'room/(?P<group>\w+)/$', websockets.ChatConsumer.as_asgi()),
 ]

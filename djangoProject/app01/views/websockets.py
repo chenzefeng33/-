@@ -1,55 +1,61 @@
-import json
-
+from channels.exceptions import StopConsumer
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.shortcuts import render
-
-from app01.views import cv
+from django.http import HttpResponse
+from rest_framework.decorators import api_view
 
 video_consumers = []
+
+chat_consumers = []
+
+
+class ChatConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        print("正在常见连接")
+        await self.accept()
+        chat_consumers.append(self)
+
+    async def disconnect(self, code):
+        chat_consumers.remove(self)
+        raise StopConsumer()
+
+    async def receive(self, text_data):
+        print("接受消息", text_data)
+        await self.send(text_data='OK')
 
 
 class VideoConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['v_name']
-        self.room_group_name = 'video_%s' % self.room_name
-        # Join room group
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
+        print("正在创建连接")
         await self.accept()
+        video_consumers.append(self)
+        await self.send(text_data='Connected to video stream')
 
     async def disconnect(self, close_code):
-        # Leave room group
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
-        )
+        video_consumers.remove(self)
+        raise StopConsumer()
 
-    # Receive message from WebSocket
     async def receive(self, text_data):
-        # print(1)
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'video_message',
-                'message': text_data,
-            }
-        )
-
-    # Receive message from room group
-    async def video_message(self, event):
-        # print(1)
-        message = event['message']
-
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'message': message
-        }))
+        print("接收消息", text_data)
+        await self.send(text_data='OK')
 
 
-def v_name(request, v_name):
-    return render(request, 'video.html', {
-        'v_name': v_name
-    })
+@api_view(['GET'])
+async def send(request):
+    msg = request.POST.get("msg")
+    # 获取到当前所有在线客户端，即clients
+    # 遍历给所有客户端推送消息
+    print('request:', request)
+    print('request.data:', request.POST)
+    if msg:
+        for consumer in chat_consumers:
+            await consumer.send(msg.encode('utf-8'))
+        return HttpResponse({"msg": "success"})
+    else:
+        HttpResponse('发送格式错误')
+
+
+async def refresh():
+    msg = 'refresh'
+    for consumer in chat_consumers:
+        await consumer.send(msg.encode('utf-8'))
+    return HttpResponse('已让所有客户端刷新')

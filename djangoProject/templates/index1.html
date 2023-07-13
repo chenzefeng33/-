@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Stream</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h1>Video Stream</h1>
+<div>
+    <video id="videoElement" autoplay></video>
+    <button id="startButton" onclick="startVideoStream()">Start</button>
+    <button id="stopButton" onclick="stopVideoStream()">Stop</button>
+</div>
+
+<script>
+    const videoElement = document.getElementById('videoElement');
+    const startButton = document.getElementById('startButton');
+    const stopButton = document.getElementById('stopButton');
+    let socket = null;
+
+    startButton.disabled = false;
+    stopButton.disabled = true;
+
+    function startVideoStream() {
+        socket = new WebSocket('ws://127.0.0.1:8000/video/123/');  // 替换为你的 WebSocket URL
+
+        socket.onopen = function () {
+            console.log('Connected to video stream');
+            startButton.disabled = true;
+            stopButton.disabled = false;
+            socket.send('start_video');
+        };
+
+        socket.onmessage = function (event) {
+            const videoData = event.data;
+
+            const blob = new Blob([videoData], { type: 'image/jpeg' });
+            const imgUrl = URL.createObjectURL(blob);
+            videoElement.src = imgUrl;
+        };
+
+        socket.onclose = function () {
+            console.log('Disconnected from video stream');
+            startButton.disabled = false;
+            stopButton.disabled = true;
+            videoElement.src = '';
+            socket = null;
+        };
+    }
+
+    function stopVideoStream() {
+        if (socket !== null && socket.readyState === WebSocket.OPEN) {
+            socket.send('stop_video');
+            socket.close();
+        }
+    }
+</script>
+</body>
+</html>
+
+

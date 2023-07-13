@@ -1,3 +1,7 @@
+import json
+
+from django.core import serializers
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from rest_framework.response import Response
 from app01.views.unjson import UnJson
@@ -5,20 +9,68 @@ from rest_framework.decorators import api_view
 from app01.models import employee_info
 from djangoProject.serializer import EmployeeSerializer
 
+
 @api_view(['GET'])
 def get_all_employee(request):
-    serialize = EmployeeSerializer(instance=employee_info.objects.all(), many=True)
-    return Response(serialize.data)
+    page = request.GET.get('page')
+    pageSize = int(request.GET.get('pageSize'))
+    response = {}
+    employee_list = employee_info.objects.all()
+    paginator = Paginator(employee_list, pageSize)
+    response['total'] = paginator.count
+    try:
+        employee = paginator.page(page)
+    except PageNotAnInteger:
+        employee = paginator.page(1)
+    except EmptyPage:
+        employee = paginator.page(paginator.num_pages)
+    response['list'] = json.loads(serializers.serialize("json", employee))
+    return Response(response)
+
 
 @api_view(['POST'])
 def select_employee_byname(request):
+    page = request.GET.get('page')
+    pageSize = int(request.GET.get('pageSize'))
+    response = {}
     data = UnJson(request.data)
     try:
-        volunteers = employee_info.objects.filter(name=data.username)
+        employee_list = employee_info.objects.filter(username__contains=data.username)
     except:
         return JsonResponse({'status': '该工作人员不存在'}, safe=False)
-    serialize = EmployeeSerializer(instance=volunteers,many=True)
-    return Response(serialize.data)
+    paginator = Paginator(employee_list, pageSize)
+    response['total'] = paginator.count
+    try:
+        employee = paginator.page(page)
+    except PageNotAnInteger:
+        employee = paginator.page(1)
+    except EmptyPage:
+        employee = paginator.page(paginator.num_pages)
+    response['list'] = json.loads(serializers.serialize("json", employee))
+    return Response(response)
+
+
+@api_view(['POST'])
+def select_employee_byidcard(request):
+    page = request.GET.get('page')
+    pageSize = int(request.GET.get('pageSize'))
+    response = {}
+    data = UnJson(request.data)
+    try:
+        employee_list = employee_info.objects.filter(id_card=data.id_card)
+    except:
+        return JsonResponse({'status': '该工作人员不存在'}, safe=False)
+    paginator = Paginator(employee_list, pageSize)
+    response['total'] = paginator.count
+    try:
+        employee = paginator.page(page)
+    except PageNotAnInteger:
+        employee = paginator.page(1)
+    except EmptyPage:
+        employee = paginator.page(paginator.num_pages)
+    response['list'] = json.loads(serializers.serialize("json", employee))
+    return Response(response)
+
 
 @api_view(['POST'])
 def delete_by_id(request):
@@ -29,6 +81,7 @@ def delete_by_id(request):
         return JsonResponse({'status': '未知错误'}, safe=False)
     volunteers.delete()
     return JsonResponse({'status': '工作人员删除成功'}, safe=False)
+
 
 @api_view(['POST'])
 def add_employee(request):
@@ -44,6 +97,7 @@ def add_employee(request):
         else:
             return JsonResponse({'status': '新增工作人员失败', 'code': 404}, safe=False)
 
+
 @api_view(['POST'])
 def modify_employee(request):
     data = UnJson(request.data)
@@ -54,9 +108,6 @@ def modify_employee(request):
     serializer = EmployeeSerializer(volunteers, data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return JsonResponse({'status': '工作人员信息修改成功','code':200}, safe=False)
+        return JsonResponse({'status': '工作人员信息修改成功', 'code': 200}, safe=False)
     else:
         return JsonResponse({'status': '工作人员信息修改失败', 'code': 404}, safe=False)
-
-
-

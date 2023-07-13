@@ -13,14 +13,27 @@ class eventList(APIView):
         serialize = EventSerializer(instance=event_info.objects.all(), many=True)
         return Response(serialize.data)
 
+
 # 获取照片，id为imgid
 @api_view(['GET'])
-def getImg(request, id):
-    result = id
-    print(result)
-    path = './'+result
-    image_data = open(path, "rb").read()
+def getImg(request, type, id):
+    if type == '0':
+        results = oldperson_info.objects.filter(ID=id).values('profile_photo')
+        path = [result['profile_photo'] for result in results]
+        path_str = ''.join(path)
+    elif type == '1':
+        results = employee_info.objects.filter(ID=id).values('profile_photo')
+        path = [result['profile_photo'] for result in results]
+        path_str = ''.join(path)
+    elif type == '2':
+        results = volunteer_info.objects.filter(ID=id).values('profile_photo')
+        path = [result['profile_photo'] for result in results]
+        path_str = ''.join(path)
+    else:
+        return HttpResponse('type 和 id 为必填字段 0 代表老人 1 代表工作人员 2 代表义工')
+    image_data = open(path_str, "rb").read()
     return HttpResponse(image_data, content_type="image/jpg")
+
 
 @api_view(['POST'])
 def uploadAvatar(request):
@@ -29,7 +42,7 @@ def uploadAvatar(request):
     :param request:
     :return:
     """
-    upload_file = request.FILES['file']
+    upload_file = request.FILES.get('file')
     request.data.pop('file')
     data = UnJson(request.data)
     obj = ''
@@ -43,15 +56,15 @@ def uploadAvatar(request):
         print(id)
         if type == '0':
             type = "oldperson"
-            obj = oldperson_info.objects.get(pk=id)
+            obj = oldperson_info.objects.get(ID=id)
             serializer = OldPersonSerializer(obj)
         elif type == '1':
             type = "employee"
-            obj = employee_info.objects.get(pk=id)
+            obj = employee_info.objects.get(id=id)
             serializer = EmployeeSerializer(obj)
         elif type == '2':
             type = "volunteer"
-            obj = volunteer_info.objects.get(pk=id)
+            obj = volunteer_info.objects.get(id=id)
             serializer = VolunteerSerializer(obj)
         else:
             return HttpResponse('type 和 id 为必填字段 0 代表老人 1 代表工作人员 2 代表义工')

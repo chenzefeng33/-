@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from app01.models import sys_user
 from djangoProject.serializer import SysUserSerializer
 
+
 @api_view(['POST'])
 def login(request):
     data = UnJson(request.data)
@@ -14,6 +15,7 @@ def login(request):
     if user.Password == data.Password:
         return JsonResponse({'status': '登录成功'}, safe=False)
     return JsonResponse({'status': '密码错误'}, safe=False)
+
 
 @api_view(['POST'])
 def register(request):
@@ -29,6 +31,7 @@ def register(request):
         return JsonResponse({'status': '未知错误'}, safe=False)
     return JsonResponse({'status': '注册成功'}, safe=False)
 
+
 @api_view(['POST'])
 def modify_pwd(request):
     data = UnJson(request.data)
@@ -40,6 +43,6 @@ def modify_pwd(request):
         serializer = SysUserSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse({'status': '修改成功','code':200}, safe=False)
+            return JsonResponse({'status': '修改成功', 'code': 200}, safe=False)
     else:
-        return JsonResponse({'status': '原密码错误','code':404}, safe=False)
+        return JsonResponse({'status': '原密码错误', 'code': 404}, safe=False)

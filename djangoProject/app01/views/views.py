@@ -1,5 +1,6 @@
 from django.http import JsonResponse, StreamingHttpResponse
 import cv2
+from django.shortcuts import render
 
 
 # Create your views here.
@@ -32,3 +33,13 @@ def video(request):
     camera = cv2.VideoCapture(0)
     # 使用流传输传输视频流
     return StreamingHttpResponse(gen_display(camera), content_type='multipart/x-mixed-replace; boundary=frame')
+
+
+def index(request):
+    return render(request, "index.html")
+
+
+def index1(request):
+    response = render(request, "index1.html")
+    response['cache-control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    return response

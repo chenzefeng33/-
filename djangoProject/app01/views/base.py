@@ -1,4 +1,6 @@
 from django.http import JsonResponse
+
+from app01.views.cookie import create_token
 from app01.views.unjson import UnJson
 from rest_framework.decorators import api_view
 from app01.models import sys_user
@@ -13,7 +15,9 @@ def login(request):
     except:
         return JsonResponse({'status': '该用户不存在'}, safe=False)
     if user.Password == data.Password:
-        return JsonResponse({'status': '登录成功'}, safe=False)
+        token = create_token(data.username)
+        data = {'code': 200, 'token': token, 'status': '登录成功' }
+        return JsonResponse(data, safe=False)
     return JsonResponse({'status': '密码错误'}, safe=False)
 
 

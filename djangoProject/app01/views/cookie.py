@@ -2,7 +2,7 @@ import time
 from django.core import signing
 import hashlib
 from django.core.cache import cache
-
+from django.http import Http404
 
 HEADER = {'typ': 'JWP', 'alg': 'default'}
 KEY = 'ShihShaw'
@@ -61,3 +61,20 @@ def check_token(token):
     if last_token:
         return last_token == token
     return False
+
+
+class TokenCheckFailedException(Exception):
+    def __init__(self, res):
+        self.res = res
+
+
+def checkToken(data):
+    try:
+        if check_token(data.token):
+            return True
+        else:
+            res = {'code': 402, 'message': '请登入'}
+            raise TokenCheckFailedException(res)
+    except BaseException:
+        res = {'code': 402, 'message': '请登入'}
+        raise TokenCheckFailedException(res)

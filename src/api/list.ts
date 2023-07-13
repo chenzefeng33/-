@@ -3,15 +3,25 @@ import qs from 'query-string';
 import type { DescData } from '@arco-design/web-vue/es/descriptions/interface';
 
 export interface PolicyRecord {
-  index: Int16Array;
-  id: string;
-  name: string;
-  sex : string;
-  age : Int16Array;
-  createdTime: string;
+  ID: Int16Array;
+  id_card: string;
+  username: string;
+  gender : string;
+  phone: string;
+  checkin_date: string;
 }
 
+export interface PolicyRecord2{
+  model: string;
+  pk: Int16Array;
+  fields: PolicyRecord[];
+}
 export interface PolicyParams extends Partial<PolicyRecord> {
+  current: number;
+  pageSize: number;
+}
+
+export interface PolicyParamsSearch {
   current: number;
   pageSize: number;
 }
@@ -22,14 +32,21 @@ export interface PolicyListRes {
 }
 
 export function queryPolicyList(params: PolicyParams) {
-  // return axios.get<PolicyListRes>('/api/list/policy', {
-  //   params,
-  //   paramsSerializer: (obj) => {
-  //     return qs.stringify(obj);
-  //   },
-  // });
+  return axios.get<PolicyListRes>('http://127.0.0.1:8000/oldman/getall', {
+    params,
+    paramsSerializer: (obj) => {
+      return qs.stringify(obj);
+    },
+  });
 }
 
+export function searchPolicyList(params: PolicyParams,username:string) {
+  const data = {
+    username
+  };
+
+  return axios.post<PolicyListRes>(`http://127.0.0.1:8000/oldman/getbyname?page=1&pageSize=10`, data);
+}
 export interface ServiceRecord {
   id: number;
   title: string;

@@ -15,6 +15,7 @@ export default {
   'menu.elder.info':'信息管理',
   'menu.elder.avatar':'头像管理',
   'menu.elder.form':'报表统计',
+  'menu.elder.analysis' : '数据分析',
 
   'menu.admin': '系统管理员中心',
   'menu.admin.info':'信息管理',

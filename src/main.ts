@@ -2,8 +2,6 @@ import { createApp } from 'vue';
 import ArcoVue from '@arco-design/web-vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
 import globalComponents from '@/components';
-import vue3videoPlay from 'vue3-video-play'; // 引入组件
-import 'vue3-video-play/dist/style.css'; // 引入css
 import router from './router';
 import store from './store';
 import i18n from './locale';
@@ -27,6 +25,5 @@ app.use(store);
 app.use(i18n);
 app.use(globalComponents);
 app.use(directive);
-app.use(vue3videoPlay)
 
 app.mount('#app');

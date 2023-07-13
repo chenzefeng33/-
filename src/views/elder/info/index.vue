@@ -11,21 +11,21 @@
             label-align="left"
           >
             <a-row :gutter="12">
-              <a-col :span="6">
+              <a-col :span="10">
                 <a-form-item
                   field="id"
-                  :label="$t('编号')"
+                  :label="$t('身份证号')"
                 >
                   <a-input
-                    v-model="formModel.id"
-                    :placeholder="$t('请输入编号')"
+                    v-model="formModel.id_card"
+                    :placeholder="$t('请输入身份证号')"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="6">
                 <a-form-item field="name" :label="$t('姓名')">
                   <a-input
-                    v-model="formModel.name"
+                    v-model="formModel.username"
                     :placeholder="$t('请输入姓名')"
                   />
                 </a-form-item>
@@ -36,7 +36,7 @@
         <a-divider style="height: 40px" direction="vertical" />
         <a-col :flex="'60px'" style="text-align: right">
           <a-space direction="horizontal" :size="20">
-            <a-button type="primary" @click="search">
+            <a-button type="primary" @click="searchData">
               <template #icon>
                 <icon-search />
               </template>
@@ -66,30 +66,26 @@
                 添加
               </template>
               <a-form :model="form" :style="{width:'420px'}">
-                <a-form-item field="id" label="编号">
-                  <a-input v-model="form.id" />
+                <a-form-item field="id" label="身份证号">
+                  <a-input v-model="form.id_card" />
                 </a-form-item>
                 <a-form-item field="name" label="姓名">
-                  <a-input v-model="form.name" />
+                  <a-input v-model="form.username" />
                 </a-form-item>
                 <a-form-item field="sex" label="性别">
-                  <a-select v-model="form.sex">
+                  <a-select v-model="form.gender">
                     <a-option value="male">男</a-option>
                     <a-option value="female">女</a-option>
                   </a-select>
                 </a-form-item>
-                <a-form-item field="age" label="年龄">
-                  <a-input v-model="form.age" />
+                <a-form-item field="age" label="电话号码">
+                  <a-input v-model="form.phone" />
+                </a-form-item>
+                <a-form-item field="checkin" label="入院时间">
+                  <a-input v-model="form.checkin_date" />
                 </a-form-item>
               </a-form>
             </a-modal>
-            <a-upload action="/">
-              <template #upload-button>
-                <a-button>
-                  {{ $t('批量导入') }}
-                </a-button>
-              </template>
-            </a-upload>
           </a-space>
         </a-col>
         <a-col
@@ -103,7 +99,7 @@
             {{ $t('下载') }}
           </a-button>
           <a-tooltip :content="$t('刷新')">
-            <div class="action-icon" @click="search"
+            <div class="action-icon" @click="searchData"
               ><icon-refresh size="18"
             /></div>
           </a-tooltip>
@@ -159,7 +155,7 @@
         </a-col>
       </a-row>
       <a-table
-        row-key="id"
+        row-key="ID"
         :loading="loading"
         :pagination="pagination"
         :columns="(cloneColumns as TableColumnData[])"
@@ -168,9 +164,20 @@
         :size="size"
         @page-change="onPageChange"
       >
+      <template #check="{ record }">
+          <a-button @click="d_handleClick">查看</a-button>
+          <a-drawer :width="600" :visible="d_visible" @ok="d_handleOk" @cancel="d_handleCancel" unmountOnClose>
+            <div>
+              <Chart/>
+              <Line/>
+            </div>
+          </a-drawer>
+        </template>
         <template #index="{ rowIndex }">
           {{ rowIndex + 1 + (pagination.current - 1) * pagination.pageSize }}
         </template>
+
+
       </a-table>
     </a-card>
   </div>
@@ -180,25 +187,41 @@
   import { computed, ref, reactive, watch, nextTick } from 'vue';
   import { useI18n } from 'vue-i18n';
   import useLoading from '@/hooks/loading';
-  import { queryPolicyList, PolicyRecord, PolicyParams } from '@/api/list';
+  import {queryPolicyList, PolicyRecord, PolicyParams, } from '@/api/list';
   import { Pagination } from '@/types/global';
   import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
   import type { TableColumnData } from '@arco-design/web-vue/es/table/interface';
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
+  import axios from "axios";
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
+
+  const d_visible = ref(false);
+
+  const d_handleClick = () => {
+    d_visible.value = true;
+  };
+  const d_handleOk = () => {
+      d_visible.value = false;
+    };
+    const d_handleCancel = () => {
+      d_visible.value = false;
+    }
 
   const newMember = () => {
     visible.value = true;
   };
   const visible = ref(false);
   const form = reactive({
-      id: '',
-      name: '',
-      sex: '',
-      age: ''
+        ID: '',
+        id_card: '',
+        username: '',
+        gender: '',
+        phone:'',
+        checkin_date: '',
+
     });
   const handleOk = () => {
     visible.value = false;
@@ -209,12 +232,12 @@
 
   const generateFormModel = () => {
     return {
-      index: '',
-      id: '',
-      name: '',
-      sex: '',
-      age: '',
-      createdTime: '',
+      ID: '',
+      id_card: '',
+      username: '',
+      gender: '',
+      phone:'',
+      checkin_date: '',
     };
   };
   const { loading, setLoading } = useLoading(true);
@@ -252,71 +275,54 @@
       value: 'large',
     },
   ]);
+
   const columns = computed<TableColumnData[]>(() => [
     {
       title: t('序号'),
-      dataIndex: 'index',
-      slotName: 'index',
+      dataIndex: 'pk',
+      slotName: 'pk',
     },
     {
-      title: t('编号'),
-      dataIndex: 'id',
+      title: t('身份证号'),
+      dataIndex: 'fields.id_card',
+      render: ({ record }) => record.fields.id_card,
     },
     {
       title: t('姓名'),
-      dataIndex: 'name',
+      dataIndex: 'fields.username',
+      render: ({ record }) => record.fields.username,
     },
     {
       title: t('性别'),
-      dataIndex: 'sex',
+      dataIndex: 'fields.gender',
+      render: ({ record }) => record.fields.gender,
     },
     {
-      title: t('年龄'),
-      dataIndex: 'age',
+      title: t('手机号'),
+      dataIndex: 'fields.phone',
+      render: ({ record }) => record.fields.phone,
     },
     {
-      title: t('创建时间'),
-      dataIndex: 'createdTime',
+      title: t('入院时间'),
+      dataIndex: 'fields.checkin_date',
+      render: ({ record }) => record.fields.checkin_date,
     },
+    {
+      title: '具体操作',
+      slotName: 'check'
+    }
   ]);
+
   const fetchData = async (
     params: PolicyParams = { current: 1, pageSize: 20 }
   ) => {
     setLoading(true);
     try {
-      // const { data } = await queryPolicyList(params);
-      const data = reactive([{
-      index: 1,
-      id: '02832',
-      name: 'Jane Doe',
-      sex: 'Female',
-      age: 72,
-      createdTime: '2023-7-9'
-    }, {
-      index: 2,
-      id: '53411',
-      name: 'William Smith',
-      sex: 'Male',
-      age: 82,
-      createdTime: '2023-7-9'
-    }, {
-      index: 3,
-      id: '20532',
-      name: 'Alisa Ross',
-      sex: 'Female',
-      age: 65,
-      createdTime: '2023-7-9'
-    },{
-      index: 4,
-      id: '53321',
-      name: 'Kevin Sandra',
-      sex: 'Male',
-      age: 75,
-      createdTime: '2023-7-9'
-    },]);
-      renderData.value = data;
+      const { data } = await queryPolicyList(params);
+      console.log("555",data.list);
+      renderData.value = data.list;
       pagination.current = params.current;
-      pagination.total = 2;
+      pagination.total = data.total;
     } catch (err) {
       // you can report use errorHandler or other
     } finally {
@@ -324,6 +330,44 @@
     }
   };
 
+  // const searchData  = async (
+  //     params: PolicyParams = { current: 1, pageSize: 20 }
+  // ) => {
+  //   setLoading(true);
+  //   try {
+  //     const { data } = await searchPolicyList(params,formModel.value.username);
+  //     console.log(data.list);
+  //     renderData.value = data.list;
+  //     pagination.total = data.total;
+  //   } catch (err) {
+  //     // you can report use errorHandler or other
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const searchData = () => {
+    axios({
+      method: 'post',
+      url: `http://127.0.0.1:8000/oldman/getbyname?page=${  pagination.current  }&pageSize=${  pagination.pageSize}`,
+      data: {
+        username:formModel.value.username
+      }
+    })
+        .then(function (value){
+          console.log(value);
+          if (value.status === 200){
+            renderData.value = value.data.list;
+            pagination.total = value.data.total;
+            console.log("succuss");
+            console.log("111",renderData.value);
+            console.log("555",value.data)
+          }else{
+            console.log("error");
+          }
+        })
+        .catch();
+  }
   const search = () => {
     fetchData({
       ...basePagination,

@@ -26,9 +26,6 @@ function init() {
   var myChart = echarts.init(main.value);
   // 指定图表的配置项和数据
   var option = {
-  // title: {
-  //   text: 'Stacked Area Chart'
-  // },
   tooltip: {
     trigger: 'axis',
     axisPointer: {
@@ -39,7 +36,7 @@ function init() {
     }
   },
   legend: {
-    data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+    data: ['入职员工', '离职员工']
   },
   toolbox: {
     feature: {
@@ -56,7 +53,7 @@ function init() {
     {
       type: 'category',
       boundaryGap: false,
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月','八月','九月','十月','十一月','十二月']
     }
   ],
   yAxis: [
@@ -66,58 +63,22 @@ function init() {
   ],
   series: [
     {
-      name: 'Email',
+      name: '入职员工',
       type: 'line',
-      stack: 'Total',
       areaStyle: {},
       emphasis: {
         focus: 'series'
       },
-      data: [120, 132, 101, 134, 90, 230, 210]
+      data: [120, 132, 101, 134, 90, 230, 210,21,90,45,90,100]
     },
     {
-      name: 'Union Ads',
+      name: '离职员工',
       type: 'line',
-      stack: 'Total',
       areaStyle: {},
       emphasis: {
         focus: 'series'
       },
-      data: [220, 182, 191, 234, 290, 330, 310]
-    },
-    {
-      name: 'Video Ads',
-      type: 'line',
-      stack: 'Total',
-      areaStyle: {},
-      emphasis: {
-        focus: 'series'
-      },
-      data: [150, 232, 201, 154, 190, 330, 410]
-    },
-    {
-      name: 'Direct',
-      type: 'line',
-      stack: 'Total',
-      areaStyle: {},
-      emphasis: {
-        focus: 'series'
-      },
-      data: [320, 332, 301, 334, 390, 330, 320]
-    },
-    {
-      name: 'Search Engine',
-      type: 'line',
-      stack: 'Total',
-      label: {
-        show: true,
-        position: 'top'
-      },
-      areaStyle: {},
-      emphasis: {
-        focus: 'series'
-      },
-      data: [820, 932, 901, 934, 1290, 1330, 1320]
+      data: [120, 182, 191, 234, 290, 330, 310,299,30,498,890,90]
     }
   ]
 };

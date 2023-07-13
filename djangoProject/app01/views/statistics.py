@@ -79,8 +79,4 @@ def uploadAvatar(request):
 
     obj.profile_photo = url
     obj.save()
-    # if serializer.is_valid():
-    #     serializer.validated_data['profile_photo'] = url
-    #     serializer.save()
-
     return Response(serializer.data)

@@ -3,9 +3,9 @@ import {
   login as userLogin,
   logout as userLogout,
   getUserInfo,
-  LoginData,
+  LoginData, LoginRes,
 } from '@/api/user';
-import { setToken, clearToken } from '@/utils/auth';
+import {setToken, clearToken, getToken} from '@/utils/auth';
 import { removeRouteListener } from '@/utils/route-listener';
 import { UserState } from './types';
 import useAppStore from '../app';
@@ -63,9 +63,25 @@ const useUserStore = defineStore('user', {
     // Login
     async login(loginForm: LoginData) {
       try {
-        const res = await userLogin(loginForm);
-        setToken(res.data.token);
+        await userLogin(loginForm);
+        // await userLogin(loginForm)
+        //     .then((res) => {
+        //       console.log(res);
+        //       const token = res;
+        //       console.log(token);
+        //       setToken(token);
+        //       // 进行其他操作
+        //     })
+        //     .catch((error) => {
+        //       console.error(error);
+        //       clearToken();
+        //       throw error;
+        //       // 处理错误
+        //     });
+        // console.log("设置token咯",res.data.token);
+        // setToken(res.data.token);
       } catch (err) {
+        console.log("这里报错不");
         clearToken();
         throw err;
       }

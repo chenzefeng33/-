@@ -26,14 +26,14 @@
         </a-input>
       </a-form-item>
       <a-form-item
-        field="password"
-        :rules="[{ required: true, message: $t('login.form.password.errMsg') }]"
+        field="Password"
+        :rules="[{ required: true, message: $t('需要输入密码') }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
         <a-input-password
-          v-model="userInfo.password"
-          :placeholder="$t('login.form.password.placeholder')"
+          v-model="userInfo.Password"
+          :placeholder="$t('需要输入密码')"
           allow-clear
         >
           <template #prefix>
@@ -82,12 +82,12 @@
 
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,
-    username: 'admin', // 演示默认值
-    password: 'admin', // demo default value
+    username: 'zzp', // 演示默认值
+    Password: '123456', // demo default value
   });
   const userInfo = reactive({
     username: loginConfig.value.username,
-    password: loginConfig.value.password,
+    Password: loginConfig.value.Password,
   });
 
   const handleSubmit = async ({
@@ -101,7 +101,9 @@
     if (!errors) {
       setLoading(true);
       try {
+        console.log(values);
         await userStore.login(values as LoginData);
+        console.log("login结束了");
         const { redirect, ...othersQuery } = router.currentRoute.value.query;
         router.push({
           name: (redirect as string) || 'Workplace',
@@ -111,11 +113,11 @@
         });
         Message.success(t('login.form.login.success'));
         const { rememberPassword } = loginConfig.value;
-        const { username, password } = values;
+        const { username, Password } = values;
         // 实际生产环境需要进行加密存储。
         // The actual production environment requires encrypted storage.
         loginConfig.value.username = rememberPassword ? username : '';
-        loginConfig.value.password = rememberPassword ? password : '';
+        loginConfig.value.Password = rememberPassword ? Password : '';
       } catch (err) {
         errorMessage.value = (err as Error).message;
       } finally {

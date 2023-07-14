@@ -1,6 +1,7 @@
 import axios from 'axios';
 import qs from 'query-string';
 import type { DescData } from '@arco-design/web-vue/es/descriptions/interface';
+import {getToken} from "@/utils/auth";
 
 export interface PolicyRecord {
   ID: Int16Array;
@@ -36,7 +37,7 @@ export function queryPolicyList(params: PolicyParams) {
     params,
     paramsSerializer: (obj) => {
       return qs.stringify(obj);
-    },
+    }
   });
 }
 

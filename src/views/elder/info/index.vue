@@ -17,7 +17,7 @@
                   :label="$t('身份证号')"
                 >
                   <a-input
-                    v-model="formModel.id_card"
+                    v-model="formModel  .id_card"
                     :placeholder="$t('请输入身份证号')"
                   />
                 </a-form-item>
@@ -36,7 +36,7 @@
         <a-divider style="height: 40px" direction="vertical" />
         <a-col :flex="'60px'" style="text-align: right">
           <a-space direction="horizontal" :size="20">
-            <a-button type="primary" @click="searchData">
+            <a-button type="primary" @click="search">
               <template #icon>
                 <icon-search />
               </template>
@@ -74,8 +74,8 @@
                 </a-form-item>
                 <a-form-item field="sex" label="性别">
                   <a-select v-model="form.gender">
-                    <a-option value="male">男</a-option>
-                    <a-option value="female">女</a-option>
+                    <a-option value="男">男</a-option>
+                    <a-option value="女">女</a-option>
                   </a-select>
                 </a-form-item>
                 <a-form-item field="age" label="电话号码">
@@ -92,14 +92,9 @@
           :span="12"
           style="display: flex; align-items: center; justify-content: end"
         >
-          <a-button>
-            <template #icon>
-              <icon-download />
-            </template>
-            {{ $t('下载') }}
-          </a-button>
+
           <a-tooltip :content="$t('刷新')">
-            <div class="action-icon" @click="searchData"
+            <div class="action-icon" @click="search"
               ><icon-refresh size="18"
             /></div>
           </a-tooltip>
@@ -194,6 +189,9 @@
   import cloneDeep from 'lodash/cloneDeep';
   import Sortable from 'sortablejs';
   import axios from "axios";
+  import Chart from './components/chart_emotion.vue';
+  import Line from './components/chart_action.vue';
+  import {getToken} from "@/utils/auth";
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
@@ -225,6 +223,26 @@
     });
   const handleOk = () => {
     visible.value = false;
+    axios({
+      method: 'post',
+      url: `http://127.0.0.1:8000/oldman/add`,
+      data: {
+        username:form.username,
+        id_card:form.id_card,
+        gender:form.gender,
+        phone:form.phone,
+      }
+    })
+        .then(function (value){
+          searchData();
+          console.log(value);
+          if (value.status === 200){
+            console.log("succuss");
+          }else{
+            console.log("error");
+          }
+        })
+        .catch();
   };
   const handleCancel = () => {
     visible.value = false;
@@ -319,32 +337,18 @@
     setLoading(true);
     try {
       const { data } = await queryPolicyList(params);
+      console.log("181818",data);
       console.log("555",data.list);
       renderData.value = data.list;
       pagination.current = params.current;
       pagination.total = data.total;
     } catch (err) {
+      console.log("出错了！");
       // you can report use errorHandler or other
     } finally {
       setLoading(false);
     }
   };
-
-  // const searchData  = async (
-  //     params: PolicyParams = { current: 1, pageSize: 20 }
-  // ) => {
-  //   setLoading(true);
-  //   try {
-  //     const { data } = await searchPolicyList(params,formModel.value.username);
-  //     console.log(data.list);
-  //     renderData.value = data.list;
-  //     pagination.total = data.total;
-  //   } catch (err) {
-  //     // you can report use errorHandler or other
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const searchData = () => {
     axios({
@@ -352,6 +356,28 @@
       url: `http://127.0.0.1:8000/oldman/getbyname?page=${  pagination.current  }&pageSize=${  pagination.pageSize}`,
       data: {
         username:formModel.value.username
+       }
+    })
+        .then(function (value){
+          console.log(value);
+          if (value.status === 200){
+            renderData.value = value.data.list;
+            pagination.total = value.data.total;
+            console.log("succuss");
+            console.log("111",renderData.value);
+            console.log("555",value.data)
+          }else{
+            console.log("error");
+          }
+        })
+        .catch();
+  }
+  const searchDataById = () => {
+    axios({
+      method: 'post',
+      url: `http://127.0.0.1:8000/oldman/getbyidcard?page=${  pagination.current  }&pageSize=${  pagination.pageSize}`,
+      data: {
+        id_card:formModel.value.id_card
       }
     })
         .then(function (value){
@@ -369,10 +395,12 @@
         .catch();
   }
   const search = () => {
-    fetchData({
-      ...basePagination,
-      ...formModel.value,
-    } as unknown as PolicyParams);
+    if(formModel.value.username){
+      searchData();
+    }
+    else if(formModel.value.id_card)
+      searchDataById()
+    else fetchData()
   };
   const onPageChange = (current: number) => {
     fetchData({ ...basePagination, current });
@@ -436,7 +464,6 @@
       });
     }
   };
-
   watch(
     () => columns.value,
     (val) => {

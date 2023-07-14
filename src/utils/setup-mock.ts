@@ -1,4 +1,4 @@
-import debug from './env';
+import debug from '../../../../Small_semester_smart_pension_system/src/utils/env';
 
 export default ({ mock, setup }: { mock?: boolean; setup: () => void }) => {
   if (mock !== false && debug) setup();
@@ -9,7 +9,7 @@ export const successResponseWrap = (data: unknown) => {
     data,
     status: 'ok',
     msg: '请求成功',
-    code: 20000,
+    code: 200,
   };
 };
 

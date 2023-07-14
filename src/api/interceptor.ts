@@ -9,6 +9,7 @@ export interface HttpResponse<T = unknown> {
   msg: string;
   code: number;
   data: T;
+  token: string;
 }
 
 if (import.meta.env.VITE_API_BASE_URL) {
@@ -22,11 +23,13 @@ axios.interceptors.request.use(
     // Authorization is a custom headers key
     // please modify it according to the actual situation
     const token = getToken();
+    console.log(token);
     if (token) {
       if (!config.headers) {
         config.headers = {};
       }
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `${token}`;
+      console.log(config.headers.Authorization);
     }
     return config;
   },
@@ -38,17 +41,21 @@ axios.interceptors.request.use(
 // add response interceptors
 axios.interceptors.response.use(
   (response: AxiosResponse<HttpResponse>) => {
+      console.log("拦截器读取response",response);
     const res = response.data;
+    // console.log("拦截器读取token",res.token);
+    // console.log("拦截器读取code",res.code);
+    // console.log("拦截器读取",res);
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    if (res.code !== 200 ) {
       Message.error({
-        content: res.msg || 'Error',
+        content: res.status || 'Error',
         duration: 5 * 1000,
       });
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (
         [50008, 50012, 50014].includes(res.code) &&
-        response.config.url !== '/api/user/info'
+        response.config.url !== 'http://127.0.0.1:8000/user/login'
       ) {
         Modal.error({
           title: 'Confirm logout',
@@ -63,9 +70,10 @@ axios.interceptors.response.use(
           },
         });
       }
-      return Promise.reject(new Error(res.msg || 'Error'));
+      console.log("reject!!!");
+      return Promise.reject(new Error(res.status|| 'Error'));
     }
-    return res;
+    return response;
   },
   (error) => {
     Message.error({

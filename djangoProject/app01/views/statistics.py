@@ -20,7 +20,8 @@ class eventList(APIView):
 def getImg(request, type, id):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         if type == '0':
             results = oldperson_info.objects.filter(ID=id).values('profile_photo')
             path = [result['profile_photo'] for result in results]
@@ -49,8 +50,8 @@ def uploadAvatar(request):
     :return:
     """
     try:
-        data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         upload_file = request.FILES.get('file')
         request.data.pop('file')
         data = UnJson(request.data)

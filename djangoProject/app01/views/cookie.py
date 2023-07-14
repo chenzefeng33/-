@@ -70,7 +70,7 @@ class TokenCheckFailedException(Exception):
 
 def checkToken(data):
     try:
-        if check_token(data.token):
+        if check_token(data):
             return True
         else:
             res = {'code': 402, 'message': '请登入'}

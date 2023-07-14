@@ -15,8 +15,8 @@ from djangoProject.serializer import OldPersonSerializer
 @api_view(['GET'])
 def get_all_oldman(request):
     try:
-        data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         page = request.GET.get('page')
         pageSize = int(request.GET.get('pageSize'))
         response = {}
@@ -40,7 +40,8 @@ def get_all_oldman(request):
 def select_oldman_byname(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         page = request.GET.get('page')
         pageSize = int(request.GET.get('pageSize'))
         response = {}
@@ -67,7 +68,8 @@ def select_oldman_byname(request):
 def select_oldman_byidcard(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         page = request.GET.get('page')
         pageSize = int(request.GET.get('pageSize'))
         response = {}
@@ -94,7 +96,8 @@ def select_oldman_byidcard(request):
 def delete_by_id(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         try:
             oldman = oldperson_info.objects.get(ID=data.ID)
         except:
@@ -109,7 +112,8 @@ def delete_by_id(request):
 def add_oldman(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         same_oldman = oldperson_info.objects.filter(id_card=data.id_card)
         if same_oldman.exists():
             return JsonResponse({'status': '该老人已存在'}, safe=False)
@@ -128,7 +132,8 @@ def add_oldman(request):
 def modify_oldman(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         try:
             oldman = oldperson_info.objects.get(ID=data.ID)
         except:

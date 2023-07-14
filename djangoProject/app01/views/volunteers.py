@@ -15,8 +15,8 @@ from djangoProject.serializer import VolunteerSerializer
 @api_view(['GET'])
 def get_all_volunteers(request):
     try:
-        data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         page = request.GET.get('page')
         pageSize = int(request.GET.get('pageSize'))
         response = {}
@@ -40,7 +40,8 @@ def get_all_volunteers(request):
 def select_volunteers_byname(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         page = request.GET.get('page')
         pageSize = int(request.GET.get('pageSize'))
         response = {}
@@ -67,7 +68,8 @@ def select_volunteers_byname(request):
 def select_volunteers_byidcard(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         page = request.GET.get('page')
         pageSize = int(request.GET.get('pageSize'))
         response = {}
@@ -94,7 +96,8 @@ def select_volunteers_byidcard(request):
 def delete_by_id(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         try:
             volunteers = volunteer_info.objects.get(id=data.ID)
         except:
@@ -109,7 +112,8 @@ def delete_by_id(request):
 def add_volunteers(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         same_volunteers = volunteer_info.objects.filter(id_card=data.id_card)
         if same_volunteers.exists():
             return JsonResponse({'status': '该义工已存在'}, safe=False)
@@ -128,7 +132,8 @@ def add_volunteers(request):
 def modify_volunteers(request):
     try:
         data = UnJson(request.data)
-        checkToken(data)
+        token = request.headers.get('Authorization')
+        checkToken(token)
         try:
             volunteers = volunteer_info.objects.get(id=data.ID)
         except:

@@ -82,7 +82,7 @@
                   <a-input v-model="form.phone" />
                 </a-form-item>
                 <a-form-item field="checkin" label="入院时间">
-                  <a-input v-model="form.checkin_date" />
+                  <a-date-picker style="width: 420px;" v-model="form.checkin_date" />
                 </a-form-item>
               </a-form>
             </a-modal>
@@ -161,6 +161,7 @@
       >
       <template #check="{ record }">
           <a-button @click="d_handleClick">查看</a-button>
+          <a-button @click="handleDelete" style="margin-left: 10px">删除</a-button>
           <a-drawer :width="600" :visible="d_visible" @ok="d_handleOk" @cancel="d_handleCancel" unmountOnClose>
             <div>
               <Chart/>
@@ -196,6 +197,9 @@
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
 
+  const handleDelete = () => {
+
+  }
   const d_visible = ref(false);
 
   const d_handleClick = () => {

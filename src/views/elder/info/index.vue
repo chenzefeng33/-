@@ -149,7 +149,6 @@
           </a-tooltip>
         </a-col>
       </a-row>
-    </a-card>
     <a-table
         row-key="ID"
         :loading="loading"
@@ -170,12 +169,6 @@
           <template #title>
             修改
           </template>
-          <!--            <a-descriptions :data="data" title="老人信息" :column="{xs:1, md:3, lg:1}">-->
-          <!--              <a-descriptions-item v-for="item of data" :label="item.label">-->
-          <!--                <a-tag>{{ item.value }}</a-tag>-->
-          <!--                <a-button type="primary" size="mini" style="margin-left: 5px;">修改</a-button>-->
-          <!--              </a-descriptions-item>-->
-          <!--            </a-descriptions>-->
           <a-form :model="alter_form" :style="{width:'400px', height: '500px'}" auto-label-width>
             <a-form-item field="id" label="身份证号">
               <a-input v-model="alter_form.id_card"
@@ -236,6 +229,7 @@
 
 
     </a-table>
+  </a-card>
   </div>
 </template>
 

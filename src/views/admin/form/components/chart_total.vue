@@ -24,7 +24,7 @@
     return {
       legend: {
         left: 'center',
-        data: ['UGC原创', '国外网站', '转载文章', '行业报告', '其他'],
+        data: ['老人', '工作人员', '义工'],
         bottom: 0,
         icon: 'circle',
         itemWidth: 8,
@@ -43,84 +43,16 @@
         elements: [
           {
             type: 'text',
-            left: '9.6%',
-            top: 'center',
-            style: {
-              text: '纯文本',
-              ...graphicElementStyle,
-            },
-          },
-          {
-            type: 'text',
             left: 'center',
             top: 'center',
             style: {
-              text: '图文类',
+              text: '人员统计',
               ...graphicElementStyle,
             },
-          },
-          {
-            type: 'text',
-            left: '86.6%',
-            top: 'center',
-            style: {
-              text: '视频类',
-              ...graphicElementStyle,
-            },
-          },
+          }
         ],
       },
       series: [
-        {
-          type: 'pie',
-          radius: ['50%', '70%'],
-          center: ['11%', '50%'],
-          label: {
-            formatter: '{d}% ',
-            color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#4E5969',
-          },
-          itemStyle: {
-            borderColor: isDark ? '#000' : '#fff',
-            borderWidth: 1,
-          },
-          data: [
-            {
-              value: [148564],
-              name: 'UGC原创',
-              itemStyle: {
-                color: '#249EFF',
-              },
-            },
-            {
-              value: [334271],
-              name: '国外网站',
-              itemStyle: {
-                color: '#846BCE',
-              },
-            },
-            {
-              value: [445694],
-              name: '转载文章',
-              itemStyle: {
-                color: '#21CCFF',
-              },
-            },
-            {
-              value: [445694],
-              name: '行业报告',
-              itemStyle: {
-                color: '#0E42D2',
-              },
-            },
-            {
-              value: [445694],
-              name: '其他',
-              itemStyle: {
-                color: '#86DF6C',
-              },
-            },
-          ],
-        },
         {
           type: 'pie',
           radius: ['50%', '70%'],
@@ -136,87 +68,23 @@
           data: [
             {
               value: [148564],
-              name: 'UGC原创',
+              name: '老人',
               itemStyle: {
                 color: '#249EFF',
               },
             },
             {
               value: [334271],
-              name: '国外网站',
+              name: '工作人员',
               itemStyle: {
                 color: '#846BCE',
               },
             },
             {
               value: [445694],
-              name: '转载文章',
+              name: '义工',
               itemStyle: {
                 color: '#21CCFF',
-              },
-            },
-            {
-              value: [445694],
-              name: '行业报告',
-              itemStyle: {
-                color: '#0E42D2',
-              },
-            },
-            {
-              value: [445694],
-              name: '其他',
-              itemStyle: {
-                color: '#86DF6C',
-              },
-            },
-          ],
-        },
-        {
-          type: 'pie',
-          radius: ['50%', '70%'],
-          center: ['88%', '50%'],
-          label: {
-            formatter: '{d}% ',
-            color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#4E5969',
-          },
-          itemStyle: {
-            borderColor: isDark ? '#000' : '#fff',
-            borderWidth: 1,
-          },
-          data: [
-            {
-              value: [148564],
-              name: 'UGC原创',
-              itemStyle: {
-                color: '#249EFF',
-              },
-            },
-            {
-              value: [334271],
-              name: '国外网站',
-              itemStyle: {
-                color: '#846BCE',
-              },
-            },
-            {
-              value: [445694],
-              name: '转载文章',
-              itemStyle: {
-                color: '#21CCFF',
-              },
-            },
-            {
-              value: [445694],
-              name: '行业报告',
-              itemStyle: {
-                color: '#0E42D2',
-              },
-            },
-            {
-              value: [445694],
-              name: '其他',
-              itemStyle: {
-                color: '#86DF6C',
               },
             },
           ],

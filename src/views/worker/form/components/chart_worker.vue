@@ -2,7 +2,7 @@
   <a-spin :loading="loading" style="width: 100%">
     <a-card
       class="general-card"
-      title="人员离职/入职对比"
+      title="人员入职\离职对比"
     >
       <div ref="main" style="width: 100%; height: 400px"></div>
     </a-card>
@@ -40,6 +40,7 @@ function init() {
   },
   toolbox: {
     feature: {
+      restore: { show: true },
       saveAsImage: {}
     }
   },

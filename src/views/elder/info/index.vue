@@ -82,7 +82,7 @@
                   <a-input v-model="form.phone" />
                 </a-form-item>
                 <a-form-item field="checkin" label="入院时间">
-                  <a-date-picker style="width: 420px;" v-model="form.checkin_date" />
+                  <a-date-picker value-format="Date" style="width: 420px;" v-model="form.checkin_date" />
                 </a-form-item>
               </a-form>
             </a-modal>
@@ -149,7 +149,8 @@
           </a-tooltip>
         </a-col>
       </a-row>
-      <a-table
+    </a-card>
+    <a-table
         row-key="ID"
         :loading="loading"
         :pagination="pagination"
@@ -158,24 +159,83 @@
         :bordered="false"
         :size="size"
         @page-change="onPageChange"
-      >
+    >
       <template #check="{ record }">
-          <a-button @click="d_handleClick">查看</a-button>
-          <a-button @click="handleDelete" style="margin-left: 10px">删除</a-button>
-          <a-drawer :width="600" :visible="d_visible" @ok="d_handleOk" @cancel="d_handleCancel" unmountOnClose>
-            <div>
-              <Chart/>
-              <Line/>
-            </div>
-          </a-drawer>
-        </template>
-        <template #index="{ rowIndex }">
-          {{ rowIndex + 1 + (pagination.current - 1) * pagination.pageSize }}
-        </template>
+        <a-button @click="handleAlter(record)">查看</a-button>
+        <a-popconfirm content="确定删除？" @ok="handleDelete(record)">
+          <a-button style="margin-left: 10px">删除</a-button>
+        </a-popconfirm>
+        <a-button @click="d_handleClick" style="margin-left: 10px">分析</a-button>
+        <a-modal v-model:visible="a_visible" @ok="a_handleOk" @cancel="a_handleCancel">
+          <template #title>
+            修改
+          </template>
+          <!--            <a-descriptions :data="data" title="老人信息" :column="{xs:1, md:3, lg:1}">-->
+          <!--              <a-descriptions-item v-for="item of data" :label="item.label">-->
+          <!--                <a-tag>{{ item.value }}</a-tag>-->
+          <!--                <a-button type="primary" size="mini" style="margin-left: 5px;">修改</a-button>-->
+          <!--              </a-descriptions-item>-->
+          <!--            </a-descriptions>-->
+          <a-form :model="alter_form" :style="{width:'400px', height: '500px'}" auto-label-width>
+            <a-form-item field="id" label="身份证号">
+              <a-input v-model="alter_form.id_card"
+                       :placeholder="getfields().fields.id_card"/>
+            </a-form-item>
+            <a-form-item field="name" label="姓名">
+              <a-input v-model="alter_form.username"
+                       :placeholder="getfields().fields.username"/>
+            </a-form-item>
+            <a-form-item field="sex" label="性别">
+              <a-select v-model="alter_form.gender"
+                        :placeholder="getfields().fields.gender">
+                <a-option value="男">男</a-option>
+                <a-option value="女">女</a-option>
+              </a-select>
+            </a-form-item>
+            <a-form-item field="age" label="电话号码">
+              <a-input v-model="alter_form.phone"
+                       :placeholder="getfields().fields.phone"/>
+            </a-form-item>
+            <a-form-item field="checkin" label="入院时间">
+              <a-date-picker value-format="Date" style="width: 420px;" v-model="alter_form.checkin_date"
+                             :placeholder="getfields().fields.checkin_date"/>
+            </a-form-item>
+            <a-form-item field="birthday" label="生日">
+              <a-date-picker value-format="Date" style="width: 420px;" v-model="alter_form.birthday"
+                             :placeholder="getfields().fields.birthday"/>
+            </a-form-item>
+            <a-form-item field="room_number" label="房间号">
+              <a-input v-model="alter_form.room_number"
+                       :placeholder="getfields().fields.room_number"/>
+            </a-form-item>
+            <a-form-item field="firstguardian_name" label="第一监护人姓名">
+              <a-input v-model="alter_form.firstguardian_name"
+                       :placeholder="getfields().fields.firstguardian_name"/>
+            </a-form-item>
+            <a-form-item field="firstguardian_relationship" label="与监护人关系">
+              <a-input v-model="alter_form.firstguardian_relationship"
+                       :placeholder="getfields().fields.firstguardian_relationship"/>
+            </a-form-item>
+            <a-form-item field="firstguardian_phone" label="监护人电话">
+              <a-input v-model="alter_form.firstguardian_phone"
+                       :placeholder="getfields().fields.firstguardian_phone"/>
+            </a-form-item>
+
+          </a-form>
+        </a-modal>
+        <a-drawer :width="600" :visible="d_visible" @ok="d_handleOk" @cancel="d_handleCancel" unmountOnClose>
+          <div>
+            <Chart/>
+            <Line/>
+          </div>
+        </a-drawer>
+      </template>
+      <template #index="{ rowIndex }">
+        {{ rowIndex + 1 + (pagination.current - 1) * pagination.pageSize }}
+      </template>
 
 
-      </a-table>
-    </a-card>
+    </a-table>
   </div>
 </template>
 
@@ -193,12 +253,114 @@
   import Chart from './components/chart_emotion.vue';
   import Line from './components/chart_action.vue';
   import {getToken} from "@/utils/auth";
+  import {keys} from "lodash";
 
   type SizeProps = 'mini' | 'small' | 'medium' | 'large';
   type Column = TableColumnData & { checked?: true };
 
-  const handleDelete = () => {
+  const current_pk = ref();
+  const disable_idcard = ref(true);
+  let record:infoRecord;
 
+  interface infoRecord{
+    pk: '',
+    fields:{
+      id_card:'',
+      username: '',
+      gender: '',
+      phone:'',
+      checkin_date: '',
+      birthday:'',
+      room_number:'',
+      firstguardian_name:'',
+      firstguardian_relationship:'',
+      firstguardian_phone:''
+    }
+  }
+
+
+  const alter_form = reactive({
+    id_card: '',
+    username: '',
+    gender: '',
+    phone:'',
+    checkin_date: '',
+    birthday:'',
+    room_number:'',
+    firstguardian_name:'',
+    firstguardian_relationship:'',
+    firstguardian_phone:''
+
+  });
+
+  const a_visible = ref(false);
+  const a_handleOk = () => {
+    a_visible.value = false;
+    axios({
+      method: 'post',
+      url: `http://127.0.0.1:8000/oldman/modify`,
+      data: {
+        ID:record.pk,
+        id_card: alter_form.id_card,
+        username: alter_form.username,
+        gender: alter_form.gender,
+        phone:alter_form.phone,
+        checkin_date: alter_form.checkin_date,
+        birthday:alter_form.birthday,
+        room_number:alter_form.room_number,
+        firstguardian_name:alter_form.firstguardian_name,
+        firstguardian_relationship:alter_form.firstguardian_relationship,
+        firstguardian_phone:alter_form.firstguardian_phone
+
+      }
+    })
+        .then(function (value){
+          console.log(value);
+          if (value.status === 200){
+            search();
+            console.log("succuss");
+          }else{
+            console.log("error");
+          }
+        })
+        .catch();
+    console.log("test",record);
+  };
+  const a_handleCancel = () => {
+    a_visible.value = false;
+  }
+  const getfields=()=> {
+    return record;
+  }
+  const handleAlter = (rec:infoRecord) => {
+    a_visible.value = true;
+    console.log("rec!!",rec);
+    record = rec;
+    Object.keys(alter_form).forEach(key => {
+      if (record.fields.hasOwnProperty(key)) {
+        alter_form[key] = record.fields[key];
+      }
+    });
+  }
+  const handleDelete = (record:any) => {
+    axios({
+      method: 'post',
+      url: `http://127.0.0.1:8000/oldman/delete`,
+      data: {
+        ID:record.pk
+      }
+    })
+        .then(function (value){
+          search()
+          console.log(value);
+          if (value.status === 200){
+            console.log("succuss");
+          }else{
+            console.log("error");
+          }
+        })
+        .catch();
+    console.log("test",record);
   }
   const d_visible = ref(false);
 
@@ -235,12 +397,18 @@
         id_card:form.id_card,
         gender:form.gender,
         phone:form.phone,
+        checkin_date:form.checkin_date
       }
     })
         .then(function (value){
           searchData();
           console.log(value);
           if (value.status === 200){
+            form.id_card='';
+            form.username='';
+            form.gender='';
+            form.phone='';
+            form.checkin_date='';
             console.log("succuss");
           }else{
             console.log("error");
@@ -299,8 +467,12 @@
   ]);
 
   const columns = computed<TableColumnData[]>(() => [
+    // {title: '序号',
+    //   dataIndex:'index',
+    //   render:
+    // },
     {
-      title: t('序号'),
+      title: t('编号'),
       dataIndex: 'pk',
       slotName: 'pk',
     },

@@ -8,10 +8,9 @@ class OldPersonSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    oldperson_id = OldPersonSerializer(read_only=True)
     class Meta:
         model = event_info
-        fields = '__all__'
+        exclude = ['id']
 
 
 class EmployeeSerializer(serializers.ModelSerializer):

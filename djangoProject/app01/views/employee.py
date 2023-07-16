@@ -104,7 +104,7 @@ def delete_by_id(request):
         except:
             return JsonResponse({'status': '未知错误'}, safe=False)
         volunteers.delete()
-        return JsonResponse({'status': '工作人员删除成功'}, safe=False)
+        return JsonResponse({'status': '工作人员删除成功', 'code': 200}, safe=False)
     except TokenCheckFailedException as e:
         return JsonResponse(e.res, status=402)
 

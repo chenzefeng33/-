@@ -54,3 +54,6 @@
 127.0.0.1 - - [11/Jul/2023:18:50:18 +0800] "GET /live?port=1935&app=live&stream=home HTTP/1.1" 200 27597049 "http://127.0.0.1:5173/dashboard/workplace" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.67"
 127.0.0.1 [11/Jul/2023:18:50:18 +0800] PLAY "live" "home" "port=1935&app=live&stream=home" - 0 27597413 "" "flv_live 1.1" (4m 16s)
 127.0.0.1 [11/Jul/2023:18:50:29 +0800] PUBLISH "live" "home" "" - 28239957 631 "" "FMLE/3.0 (compatible; Lavf60.10.100)" (4m 37s)
+127.0.0.1 [15/Jul/2023:15:19:17 +0800] PUBLISH "live" "home" "" - 39801900 631 "" "FMLE/3.0 (compatible; FMSc/1.0)" (1m 59s)
+127.0.0.1 - - [15/Jul/2023:15:20:17 +0800] "GET /live?port=1935&app=live&stream=home HTTP/1.1" 200 39922925 "-" "VLC/3.0.18 LibVLC/3.0.18"
+127.0.0.1 [15/Jul/2023:15:20:17 +0800] PLAY "live" "home" "port=1935&app=live&stream=home" - 0 39923289 "" "flv_live 1.1" (2m 51s)

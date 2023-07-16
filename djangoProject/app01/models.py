@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 class oldperson_info(models.Model):
@@ -21,7 +22,8 @@ class oldperson_info(models.Model):
     firstguardian_phone = models.CharField(blank=True, null=True, max_length=50, verbose_name="第一监护人电话")
     firstguardian_wechat = models.CharField(blank=True, null=True, max_length=50, verbose_name="第一监护人微信")
     secondguardian_name = models.CharField(blank=True, null=True, max_length=50, verbose_name="第二监护人姓名")
-    secondguardian_relationship = models.CharField(blank=True, null=True, max_length=50, verbose_name="与第二监护人关系")
+    secondguardian_relationship = models.CharField(blank=True, null=True, max_length=50,
+                                                   verbose_name="与第二监护人关系")
     secondguardian_phone = models.CharField(blank=True, null=True, max_length=50, verbose_name="第二监护人电话")
     secondguardian_wechat = models.CharField(blank=True, null=True, max_length=50, verbose_name="第二监护人微信")
     health_state = models.CharField(blank=True, null=True, max_length=50, verbose_name="健康状况")
@@ -32,6 +34,7 @@ class oldperson_info(models.Model):
     UPDATED = models.DateTimeField(blank=True, null=True, verbose_name="更新时间")
     UPDATEBY = models.IntegerField(blank=True, null=True, verbose_name="更新人")
     REMOVE = models.CharField(blank=True, null=True, max_length=10, verbose_name="删除标志")
+
 
 class employee_info(models.Model):
     id = models.AutoField(primary_key=True, verbose_name="工作人员id")
@@ -54,6 +57,7 @@ class employee_info(models.Model):
     UPDATEBY = models.IntegerField(blank=True, null=True, verbose_name="更新人")
     REMOVE = models.CharField(blank=True, null=True, max_length=10, verbose_name="删除标志")
 
+
 class volunteer_info(models.Model):
     id = models.AutoField(primary_key=True, verbose_name="义工id")
     ORG_ID = models.IntegerField(blank=True, null=True)
@@ -75,6 +79,7 @@ class volunteer_info(models.Model):
     UPDATEBY = models.IntegerField(blank=True, null=True, verbose_name="更新人")
     REMOVE = models.CharField(blank=True, null=True, max_length=10, verbose_name="删除标志")
 
+
 class event_info(models.Model):
     id = models.AutoField(primary_key=True, verbose_name="事件id")
     event_type = models.IntegerField(blank=True, null=True, verbose_name="事件类型")
@@ -82,6 +87,7 @@ class event_info(models.Model):
     event_location = models.CharField(blank=True, null=True, max_length=200, verbose_name="事件发生的地点")
     event_desc = models.CharField(blank=True, null=True, max_length=200, verbose_name="事件描述")
     oldperson_id = models.IntegerField(blank=True, null=True, verbose_name="老人id")
+
 
 class sys_user(models.Model):
     ID = models.AutoField(primary_key=True, verbose_name="系统管理员id")
@@ -108,7 +114,3 @@ class sys_user(models.Model):
     qqopenid = models.CharField(blank=True, null=True, max_length=100, verbose_name="用于第三方登录的凭证")
     appversion = models.CharField(blank=True, null=True, max_length=10, verbose_name="检测app的版本号")
     jsonauth = models.CharField(blank=True, null=True, max_length=1000, verbose_name="用于app的权限控制")
-
-
-
-

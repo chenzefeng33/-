@@ -13,9 +13,9 @@ Including another URLconf
     1. Import to include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.urls import path, re_path
+from django.urls import path
 
-from app01.views import base, employee, oldman, statistics, volunteers, websockets, live, views
+from app01.views import base, employee, oldman, statistics, volunteers, views, event
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -53,17 +53,24 @@ urlpatterns = [
     path('employee/add', employee.add_employee),
     path('employee/modify', employee.modify_employee),
 
-    # CV 算法
-    path('live/video/', live.play_video),
+    # EVENT 事件
+    path('event/add', event.add_event),
 
-    # TEST 测试
-    path('test/index/', views.index),
-    path('test/index1/', views.index1),
+    # 视频流与事件的处理_测试接口
+    path('display/video_test/', views.video_test),
+    path('display/emo_frame/', views.emo_frame),
 
-]
+    # cv算法的开启、关闭接口
+    path('display/emo_stream/', views.emo_stream),
+    path('display/fall_stream/', views.fall_stream),
+    path('display/close_emotion_stream/', views.close_emotion_stream),
+    path('display/close_fall_stream/', views.close_fall_stream),
 
-websocket_urlpatterns = [
-    # 前端请求websocket连接
-    re_path(r'video/(?P<group>\w+)/$', websockets.VideoConsumer.as_asgi()),
-    re_path(r'room/(?P<group>\w+)/$', websockets.ChatConsumer.as_asgi()),
+    # 录入人脸
+    path('display/get_face/', views.getFace),
+    # 加载人脸特征
+    path('display/load_face/', views.loadFace),
+
+    # 一个事件写入调用的接口-仅用于测试
+    path('event/', views.write_to),
 ]

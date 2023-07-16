@@ -33,18 +33,18 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
+    # 'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
+    # 'channels',
     'app01.apps.App01Config',
     'background_task',
     'rest_framework',
-    'corsheaders',  # 注册应用cors
+    # 'corsheaders',  # 注册应用cors
 ]
 
 MIDDLEWARE = [
@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # 注册组件cors
+    # 'corsheaders.middleware.CorsMiddleware',  # 注册组件cors
     'django.middleware.common.CommonMiddleware'
 ]
 
@@ -165,19 +165,32 @@ CORS_ORIGIN_REGEX_WHITELIST = [
     r"^https://\w+\.test\.com$",
 ]
 
-CORS_ALLOW_HEADERS = (
-    'XMLHttpRequest',
-    'X_FILENAME',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-    'Pragma',
-)
+# CORS_ALLOW_HEADERS = (
+#     'XMLHttpRequest',
+#     'X_FILENAME',
+#     'accept-encoding',
+#     'authorization',
+#     'content-type',
+#     'dnt',
+#     'origin',
+#     'user-agent',
+#     'x-csrftoken',
+#     'x-requested-with',
+#     'Pragma',
+# )
 
-# 指定ASGI的路由地址
-ASGI_APPLICATION = 'djangoProject.asgi.application'
+# # 生产环境中使用redis做后台，安装channels_redis
+# CHANNEL_LAYERS = {
+#     # "default": {
+#     #     "BACKEND": "channels_redis.core.RedisChannelLayer",
+#     #     "CONFIG": {
+#     #         "hosts": [("127.0.0.1", 6379)]
+#     #     },
+#     # },
+#     "default": {
+#         "BACKEND": "channels.layers.InMemoryChannelLayer"
+#     }
+# }
+#
+# # 指定ASGI的路由地址
+# ASGI_APPLICATION = 'djangoProject.asgi.application'

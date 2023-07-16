@@ -13,26 +13,6 @@ const ADMIN: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: 'info',
-      name: 'Info-admin',
-      component: () => import('@/views/admin/info/index.vue'),
-      meta: {
-        locale: 'menu.admin.info',
-        requiresAuth: true,
-        roles: ['*'],
-      },
-    },
-    // {
-    //   path: 'avatar',
-    //   name: 'Avatar-admin',
-    //   component: () => import('@/views/admin/avatar/index.vue'),
-    //   meta: {
-    //     locale: 'menu.admin.avatar',
-    //     requiresAuth: true,
-    //     roles: ['*'],
-    //   },
-    // },
-    {
         path: 'form',
         name: 'Form-admin',
         component: () => import('@/views/admin/form/index.vue'),

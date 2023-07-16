@@ -171,47 +171,37 @@
           </template>
           <a-form :model="alter_form" :style="{width:'400px', height: '500px'}" auto-label-width>
             <a-form-item field="id" label="身份证号">
-              <a-input v-model="alter_form.id_card"
-                       :placeholder="getfields().fields.id_card"/>
+              <a-input v-model="alter_form.id_card"/>
             </a-form-item>
             <a-form-item field="name" label="姓名">
-              <a-input v-model="alter_form.username"
-                       :placeholder="getfields().fields.username"/>
+              <a-input v-model="alter_form.username"/>
             </a-form-item>
             <a-form-item field="sex" label="性别">
-              <a-select v-model="alter_form.gender"
-                        :placeholder="getfields().fields.gender">
+              <a-select v-model="alter_form.gender">
                 <a-option value="男">男</a-option>
                 <a-option value="女">女</a-option>
               </a-select>
             </a-form-item>
             <a-form-item field="age" label="电话号码">
-              <a-input v-model="alter_form.phone"
-                       :placeholder="getfields().fields.phone"/>
+              <a-input v-model="alter_form.phone"/>
             </a-form-item>
             <a-form-item field="checkin" label="入院时间">
-              <a-date-picker value-format="Date" style="width: 420px;" v-model="alter_form.checkin_date"
-                             :placeholder="getfields().fields.checkin_date"/>
+              <a-date-picker value-format="Date" style="width: 420px;" v-model="alter_form.checkin_date"/>
             </a-form-item>
             <a-form-item field="birthday" label="生日">
-              <a-date-picker value-format="Date" style="width: 420px;" v-model="alter_form.birthday"
-                             :placeholder="getfields().fields.birthday"/>
+              <a-date-picker value-format="Date" style="width: 420px;" v-model="alter_form.birthday"/>
             </a-form-item>
             <a-form-item field="room_number" label="房间号">
-              <a-input v-model="alter_form.room_number"
-                       :placeholder="getfields().fields.room_number"/>
+              <a-input v-model="alter_form.room_number"/>
             </a-form-item>
             <a-form-item field="firstguardian_name" label="第一监护人姓名">
-              <a-input v-model="alter_form.firstguardian_name"
-                       :placeholder="getfields().fields.firstguardian_name"/>
+              <a-input v-model="alter_form.firstguardian_name"/>
             </a-form-item>
             <a-form-item field="firstguardian_relationship" label="与监护人关系">
-              <a-input v-model="alter_form.firstguardian_relationship"
-                       :placeholder="getfields().fields.firstguardian_relationship"/>
+              <a-input v-model="alter_form.firstguardian_relationship"/>
             </a-form-item>
             <a-form-item field="firstguardian_phone" label="监护人电话">
-              <a-input v-model="alter_form.firstguardian_phone"
-                       :placeholder="getfields().fields.firstguardian_phone"/>
+              <a-input v-model="alter_form.firstguardian_phone"/>
             </a-form-item>
 
           </a-form>

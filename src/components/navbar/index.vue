@@ -150,30 +150,15 @@
             :size="32"
             :style="{ marginRight: '8px', cursor: 'pointer' }"
           >
-            <img alt="avatar" :src="avatar" />
+            <icon-user />
+<!--            <img alt="avatar" :src="avatar" />-->
           </a-avatar>
           <template #content>
-            <!-- <a-doption>
-              <a-space @click="switchRoles">
-                <icon-tag />
-                <span>
-                  {{ $t('messageBox.switchRoles') }}
-                </span>
-              </a-space>
-            </a-doption> -->
-            <!-- <a-doption>
-              <a-space @click="$router.push({ name: 'Info' })">
-                <icon-user />
-                <span>
-                  {{ $t('messageBox.userCenter') }}
-                </span>
-              </a-space>
-            </a-doption> -->
             <a-doption>
-              <a-space @click="$router.push({ name: 'Info-admin' })">
+              <a-space @click="updatePassword">
                 <icon-settings />
                 <span>
-                  {{ $t('messageBox.userSettings') }}
+                  {{ $t('修改密码') }}
                 </span>
               </a-space>
             </a-doption>
@@ -181,19 +166,32 @@
               <a-space @click="handleLogout">
                 <icon-export />
                 <span>
-                  {{ $t('messageBox.logout') }}
+                  {{ $t('退出登录') }}
                 </span>
               </a-space>
             </a-doption>
           </template>
         </a-dropdown>
+        <a-modal width="420px" v-model:visible="visible" @ok="handleOk" @cancel="handleCancel">
+          <template #title>
+            修改密码
+          </template>
+          <a-form :model="password" :style="{ width: '350px' }">
+            <a-form-item field="old" label="旧密码">
+              <a-input v-model="password.old" placeholder="请输入旧密码" />
+            </a-form-item>
+            <a-form-item field="new" label="新密码">
+              <a-input v-model="password.new" placeholder="请输入新密码" />
+            </a-form-item>
+          </a-form>
+        </a-modal>
       </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, inject } from 'vue';
+import {computed, ref, inject, reactive} from 'vue';
   import { Message } from '@arco-design/web-vue';
   import { useDark, useToggle, useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
@@ -260,7 +258,24 @@
     Message.success(res as string);
   };
   const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void;
+  const password = reactive({
+    old: '',
+    new: ''
+  });
+  const visible = ref(false);
+  const handleOk = () => {
+    visible.value = false;
+  };
+  const handleCancel = () => {
+    visible.value = false;
+  }
+  const  updatePassword = () => {
+    visible.value = true;
+  }
+
+
 </script>
+
 
 <style scoped lang="less">
   .navbar {

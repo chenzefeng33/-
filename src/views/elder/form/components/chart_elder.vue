@@ -39,8 +39,8 @@ function init() {
     feature: {
       // dataView: { show: true, readOnly: false },
       // magicType: { show: true, type: ['line', 'bar'] },
-      restore: { show: true },
-      saveAsImage: { show: true }
+      // restore: { show: true },
+      // saveAsImage: { show: true }
     }
   },
   legend: {

@@ -4,7 +4,11 @@
       <div class="panel">
         <Banner />
         <div style="width: 95%; margin-left: auto; margin-right: auto;">
-          <DataPanel />
+          <div style="margin-top: 20px; margin-bottom: 20px;">
+            <a-button style="margin-left: 20px" @click="startVideo">开始监控</a-button>
+            <a-button style="margin-left: 20px" @click="endVideo">结束监控</a-button>
+          </div>
+         <DataPanel />
         </div>
         <ContentChart />
       </div>
@@ -16,6 +20,14 @@
   import Banner from './components/banner.vue';
   import DataPanel from './components/data-panel.vue';
   import ContentChart from './components/content-chart.vue';
+
+  const startVideo = () => {
+
+  }
+
+  const endVideo = () => {
+
+  }
 </script>
 
 <script lang="ts">

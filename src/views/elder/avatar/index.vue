@@ -2,24 +2,20 @@
   <div class="container">
     <Breadcrumb :items="['menu.elder', 'menu.elder.avatar']" />
     <a-card class="general-card">
-      <div :style="{ display: 'flex' }">
+<!--      <div :style="{ display: 'flex' }">-->
         <a-row :gutter="24">
-          <!-- <a-col :span="24">
-            <div style="margin-top: 15px; margin-left: 95%;">
-          <a-input-search
-                :placeholder="$t('搜索')"
-                style="width: 240px;"
-          />
-        </div>
-          </a-col> -->
-          <a-col :span="6" style="margin-top: 25px;">
-            <a-card @click="handleAdd" style="height: 220px; width: 223px;">
-              <icon-plus style="font-size: 190px " />
+          <a-col :span="24">
+            <div style="margin-top: 20px;">
+              <a-button @click="handleAdd">
+                <template #icon>
+                  <icon-plus />
+                </template>
+                新增头像</a-button>
               <a-modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel">
                 <template #title>
                   新增头像
                 </template>
-                <a-form :model="form" :style="{ width: '400px' }" @submit="handleSubmit">
+                <a-form :model="form" :style="{ width: '400px' }">
                   <a-form-item field="ID" label="ID">
                     <a-input
                         v-model="input_id"
@@ -36,23 +32,18 @@
                   </a-form-item>
                 </a-form>
               </a-modal>
-            </a-card>
+            </div>
           </a-col>
           <a-col :span="6" style="margin-top: 25px;" v-for="image in images">
-            <a-card title="姓名" hoverable style="height: 220px;">
+            <a-card :title="image.name" hoverable style="height: 250px;">
               <template #extra>
-                <a-link>修改</a-link>
+<!--                <a-link>修改</a-link>-->
               </template>
-              <!-- <img
-                  :style="{ width: '100%', transform: 'translateY(+2px)' } "
-                  alt="dessert"
-                  src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a20012a2d4d5b9db43dfc6a01fe508c0.png~tplv-uwbnlip3yd-webp.webp"
-                /> -->
-              <img :src="image" alt="照片" :style="{ width: '100%', transform: 'translateY(+2px)' } ">
+              <img :src="image.avatar" alt="照片" style="height: 175px;">
             </a-card>
           </a-col>
         </a-row>
-      </div>
+<!--      </div>-->
     </a-card>
   </div>
 </template>
@@ -66,6 +57,7 @@ const photoDataUrl = ref('');
 
 const visible = ref(false);
 const input_id = ref();
+const input_avatar = ref();
 const images = reactive([]);
 const form = reactive({
   name: '',
@@ -80,8 +72,9 @@ const handleAdd = () => {
   startCamera();
 };
 const handleOk = () => {
-  visible.value = false;
+  images.push({name: input_id.value,avatar:input_avatar.value});
   stopCamera();
+  visible.value = false;
 };
 const handleCancel = () => {
   visible.value = false;
@@ -116,7 +109,7 @@ function takePhoto() {
 
     // 将画布中的图像转换为数据URL
     const photoDataUrl = canvas.toDataURL('image/jpeg');
-    images.push(photoDataUrl);
+    input_avatar.value = photoDataUrl;
     console.log(111,photoDataUrl);
     console.log(images);
     // 将photoDataUrl发送给后端接口

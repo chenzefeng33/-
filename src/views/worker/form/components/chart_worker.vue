@@ -40,8 +40,8 @@ function init() {
   },
   toolbox: {
     feature: {
-      restore: { show: true },
-      saveAsImage: {}
+      // restore: { show: true },
+      // saveAsImage: {}
     }
   },
   grid: {

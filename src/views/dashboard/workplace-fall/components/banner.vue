@@ -2,7 +2,7 @@
   <a-col class="banner">
     <a-col :span="8">
       <a-typography-title :heading="5" style="margin-top: 0">
-        情绪监测
+        摔倒监测
       </a-typography-title>
     </a-col>
     <a-divider class="panel-border" />
